@@ -1,0 +1,12 @@
+server:
+  port: 9090
+aws:
+  s3:
+    accessKey: foobar
+    secretKey: foobar
+    bucket.name: mytestbucket
+  region: us-east-1
+localstack:
+  enabled: true
+  endpoint: http://localhost:4572
+  region: us-east-1

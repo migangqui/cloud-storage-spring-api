@@ -1,0 +1,19 @@
+server:
+  port: 9090
+gcp:
+  storage:
+    enabled: true
+    bucket:
+      name: migangqui-sample
+    keyfile: /home/migue/Escritorio/google-cloud-storage-poc/src/main/resources/pocs-migangqui-ab417e373c5c.json
+aws:
+  s3:
+    enabled: true
+    accessKey: foobar
+    secretKey: foobar
+    bucket.name: mytestbucket
+  region: us-east-1
+localstack:
+  enabled: true
+  endpoint: http://localhost:4572
+  region: us-east-1
