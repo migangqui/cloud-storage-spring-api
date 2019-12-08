@@ -5,7 +5,7 @@ gcp:
     enabled: true
     bucket:
       name: migangqui-sample
-    keyfile: /home/migue/Escritorio/google-cloud-storage-poc/src/main/resources/pocs-migangqui-ab417e373c5c.json
+    keyfile: "where-you-keyfile"
 aws:
   s3:
     enabled: true

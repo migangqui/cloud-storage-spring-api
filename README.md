@@ -1,6 +1,6 @@
-# Spring AWS S3 API (Java/Kotlin)
+# cloud-storage-spring-api (Java/Kotlin)
 
-Here we are a Java and a Kotlin API to manage files of AmazonS3 in Spring framework. In order to use it, are necesaries the following steps:
+Here we are a Java and a Kotlin API to manage files of AWS S3, Google Cloud Storage and Azure Blob Storage in Spring framework. In order to use it, are necesaries the following steps:
 
 ### Add dependency to pom.xml:
 
