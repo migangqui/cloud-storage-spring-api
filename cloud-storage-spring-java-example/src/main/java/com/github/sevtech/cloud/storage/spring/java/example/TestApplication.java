@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.ResultSet;
 
 @RestController
 @RequestMapping
@@ -51,7 +52,7 @@ public class TestApplication {
     /* Azure*/
 
     @PostMapping("/azure/files")
-    public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
+    public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
         return azureBlobStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
     }
 }

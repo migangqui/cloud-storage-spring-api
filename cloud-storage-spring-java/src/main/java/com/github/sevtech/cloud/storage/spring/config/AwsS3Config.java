@@ -57,7 +57,8 @@ public class AwsS3Config {
     static class AwsS3Condition implements Condition {
         @Override
         public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
-            return conditionContext.getEnvironment().getProperty("aws.s3.enabled") != null;
+            Boolean condition = conditionContext.getEnvironment().getProperty("aws.s3.enabled", Boolean.class);
+            return condition != null && condition;
         }
     }
 

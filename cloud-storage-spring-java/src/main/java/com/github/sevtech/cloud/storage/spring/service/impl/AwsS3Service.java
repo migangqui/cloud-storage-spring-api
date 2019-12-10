@@ -49,7 +49,7 @@ public class AwsS3Service implements StorageService {
         try {
             InputStream streamToUpload = clone(request.getStream());
 
-            ObjectMetadata metadata = new ObjectMetadata();
+            final ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(IOUtils.toByteArray(request.getStream()).length);
 
             if (!StringUtils.isEmpty(request.getContentType())) {
@@ -57,9 +57,9 @@ public class AwsS3Service implements StorageService {
                 metadata.setCacheControl("s-maxage");
             }
 
-            String path = request.getFolder().concat("/").concat(request.getName());
+            final String path = request.getFolder().concat("/").concat(request.getName());
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(request.getBucketName()), path, streamToUpload, metadata)
+            final PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(request.getBucketName()), path, streamToUpload, metadata)
                     .withCannedAcl(request.getAccessControl());
 
             log.debug("Uploading file to {}", path);
@@ -94,7 +94,7 @@ public class AwsS3Service implements StorageService {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try {
-            S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName()), request.getPath()));
+            final S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName()), request.getPath()));
             result = GetFileResponse.builder().content(s3Object.getObjectContent()).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException e) {
             log.error(e.getMessage(), e);
@@ -108,7 +108,7 @@ public class AwsS3Service implements StorageService {
         log.info("Deleting file from path {}", request.getPath());
         DeleteFileResponse result;
         try {
-            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(getBucketName(request.getBucketName()), request.getPath());
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(getBucketName(request.getBucketName()), request.getPath());
             awsS3Client.deleteObject(deleteObjectRequest);
             result = DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
         } catch (AmazonServiceException ase) {
@@ -146,8 +146,8 @@ public class AwsS3Service implements StorageService {
         InputStream result = null;
         try {
             inputStream.mark(0);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            final byte[] buffer = new byte[1024];
             int readLength;
             while ((readLength = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, readLength);

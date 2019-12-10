@@ -1,7 +1,11 @@
 package com.github.sevtech.cloud.storage.spring.service.impl;
 
 import com.amazonaws.util.IOUtils;
-import com.azure.storage.blob.BlobContainerClient;
+import com.azure.core.util.Context;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.models.AccessTier;
+import com.azure.storage.blob.models.BlobHttpHeaders;
+import com.azure.storage.blob.models.BlobRequestConditions;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest;
 import com.github.sevtech.cloud.storage.spring.bean.DeleteFileResponse;
@@ -20,6 +24,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Future;
 
@@ -29,10 +35,10 @@ public class AzureBlobStorageService implements StorageService {
     @Value("${azure.blob.storage.container.name}")
     private String defaultContainerName;
 
-    private final BlobContainerClient blobContainerClient;
+    private final BlobServiceClient blobServiceClient;
 
-    public AzureBlobStorageService(BlobContainerClient blobContainerClient) {
-        this.blobContainerClient = blobContainerClient;
+    public AzureBlobStorageService(BlobServiceClient blobServiceClient) {
+        this.blobServiceClient = blobServiceClient;
     }
 
     @Override
@@ -40,18 +46,20 @@ public class AzureBlobStorageService implements StorageService {
         UploadFileResponse result;
 
         try {
-            getBucketName(uploadFileRequest.getBucketName());
+            final String bucketName = getBucketName(uploadFileRequest.getBucketName());
 
             final String path = uploadFileRequest.getFolder().concat("/").concat(uploadFileRequest.getName());
 
-            InputStream streamToUpload = clone(uploadFileRequest.getStream());
+            final InputStream streamToUpload = clone(uploadFileRequest.getStream());
 
-            final BlockBlobClient blockBlobClient = blobContainerClient.getBlobClient(path).getBlockBlobClient();
+            final BlockBlobClient blockBlobClient = blobServiceClient.getBlobContainerClient(bucketName).getBlobClient(path).getBlockBlobClient();
 
+            BlobHttpHeaders headers = new BlobHttpHeaders();
+            headers.setContentType(uploadFileRequest.getContentType());
             blockBlobClient.upload(streamToUpload, IOUtils.toByteArray(uploadFileRequest.getStream()).length);
+            blockBlobClient.setHttpHeaders(headers);
 
             result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_OK).comment(blockBlobClient.getBlobUrl()).build();
-
         } catch (IOException | NoBucketException e) {
             log.warn("Error creating blob");
             result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)

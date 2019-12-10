@@ -40,12 +40,12 @@ public class GoogleCloudStorageService implements StorageService {
         UploadFileResponse result;
 
         try {
-            String bucketName = Optional.ofNullable(
+            final String bucketName = Optional.ofNullable(
                     Optional.ofNullable(uploadFileRequest.getBucketName()).orElse(defaultBucketName))
                     .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
-            String path = uploadFileRequest.getFolder().concat("/").concat(uploadFileRequest.getName());
+            final String path = uploadFileRequest.getFolder().concat("/").concat(uploadFileRequest.getName());
 
-            BlobInfo blobInfo = storageClient.create(BlobInfo.newBuilder(bucketName, path)
+            final BlobInfo blobInfo = storageClient.create(BlobInfo.newBuilder(bucketName, path)
 //                  .setAcl(new ArrayList<>(Arrays.asList(Acl.of(User.ofAllUsers(), Role.READER))))
                     .build(), IOUtils.toByteArray(uploadFileRequest.getStream()));
             result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_OK).comment(blobInfo.getMediaLink()).build();
@@ -68,7 +68,7 @@ public class GoogleCloudStorageService implements StorageService {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try {
-            byte[] file = storageClient.readAllBytes(BlobId.of(getBucketName(request.getBucketName()), request.getPath()));
+            final byte[] file = storageClient.readAllBytes(BlobId.of(getBucketName(request.getBucketName()), request.getPath()));
             result = GetFileResponse.builder().content(new ByteArrayInputStream(file)).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException e) {
             log.error(e.getMessage(), e);

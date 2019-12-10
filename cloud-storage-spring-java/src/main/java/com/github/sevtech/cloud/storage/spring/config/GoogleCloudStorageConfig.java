@@ -44,7 +44,8 @@ public class GoogleCloudStorageConfig {
     static class GoogleCloudStorageCondition implements Condition {
         @Override
         public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
-            return conditionContext.getEnvironment().getProperty("gcp.storage.enabled") != null;
+            Boolean condition = conditionContext.getEnvironment().getProperty("gcp.storage.enabled", Boolean.class);
+            return condition != null && condition;
         }
     }
 }
