@@ -27,26 +27,26 @@ public class TestApplication {
         SpringApplication.run(TestApplication.class, args);
     }
 
-    @Autowired
-    private StorageService awsS3Service;
-    @Autowired
-    private StorageService googleCloudStorageService;
+//    @Autowired
+//    private StorageService awsS3Service;
+//    @Autowired
+//    private StorageService googleCloudStorageService;
     @Autowired
     private StorageService azureBlobStorageService;
 
     /* AWS */
 
-    @PostMapping("/aws/files")
-    public UploadFileResponse uploadFileAws(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-        return awsS3Service.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-    }
-
-    /* Google Cloud */
-
-    @PostMapping("/gcp/files")
-    public UploadFileResponse uploadFileGcp(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-    }
+//    @PostMapping("/aws/files")
+//    public UploadFileResponse uploadFileAws(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
+//        return awsS3Service.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+//    }
+//
+//    /* Google Cloud */
+//
+//    @PostMapping("/gcp/files")
+//    public UploadFileResponse uploadFileGcp(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
+//        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+//    }
 
     /* Azure*/
 

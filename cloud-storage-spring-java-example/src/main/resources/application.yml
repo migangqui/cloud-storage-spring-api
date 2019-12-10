@@ -2,13 +2,13 @@ server:
   port: 9090
 gcp:
   storage:
-    enabled: true
+    enabled: false
     bucket:
       name: migangqui-sample
     keyfile: "where-you-keyfile"
 aws:
   s3:
-    enabled: true
+    enabled: false
     accessKey: foobar
     secretKey: foobar
     bucket.name: mytestbucket
@@ -18,7 +18,7 @@ azure:
   blob:
     storage:
       enabled: true
-      connectionString: DefaultEndpointsProtocol=https;AccountName=sevtech;AccountKey=UnaEGgyU55km7eI0Tt/nFZDrC1BF7nfKR2u+TafSRN5SsO0XS45Z4zyGknizALdOtj8eqmzUtNI3GY43YWpLZg==;EndpointSuffix=core.windows.net
+      connectionString: "yourconnectionstring"
       container:
         name: images
 localstack:
