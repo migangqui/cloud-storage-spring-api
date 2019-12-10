@@ -8,7 +8,7 @@ gcp:
     keyfile: "where-you-keyfile"
 aws:
   s3:
-    enabled: false
+    enabled: true
     accessKey: foobar
     secretKey: foobar
     bucket.name: mytestbucket
@@ -17,11 +17,11 @@ aws:
 azure:
   blob:
     storage:
-      enabled: true
-      connectionString: "DefaultEndpointsProtocol=https;AccountName=migangqui;AccountKey=REW3dbV6vaGKAwRD4M7dYSzUowHJdST2pSdFf7uplgR6vEwSTRfuoZgb15HvQ/muiGlYPQzsIeVvcU06GIhGGw==;EndpointSuffix=core.windows.net"
+      enabled: false
+      connectionString: "yourconnectionstring"
       container:
-        name: prueba1
+        name: images
 localstack:
-  enabled: false
+  enabled: true
   endpoint: http://localhost:4572
   region: us-east-1
