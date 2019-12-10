@@ -1,7 +1,6 @@
 package com.github.sevtech.cloud.storage.spring.service.impl
 
 import com.amazonaws.util.IOUtils
-import com.github.migangqui.cloud.storage.spring.bean.*
 import com.github.sevtech.cloud.storage.spring.bean.*
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
 import com.github.sevtech.cloud.storage.spring.service.StorageService

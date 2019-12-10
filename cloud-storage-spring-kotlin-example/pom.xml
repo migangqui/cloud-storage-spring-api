@@ -42,10 +42,9 @@
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-reflect</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.github.sevtech</groupId>
-			<artifactId>spring-aws-s3-kotlin</artifactId>
+			<artifactId>cloud-storage-spring-kotlin</artifactId>
 			<version>1.0.0.RC</version>
 		</dependency>
 
