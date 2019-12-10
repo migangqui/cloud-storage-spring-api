@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.annotattions;
+package com.github.sevtech.cloud.storage.spring.annotattion;
 
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;

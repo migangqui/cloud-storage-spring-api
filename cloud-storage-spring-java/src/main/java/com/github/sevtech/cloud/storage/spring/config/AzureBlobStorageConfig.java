@@ -2,6 +2,7 @@ package com.github.sevtech.cloud.storage.spring.config;
 
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.github.sevtech.cloud.storage.spring.annotattion.ConditionalOnCloudStorageProperty;
 import com.github.sevtech.cloud.storage.spring.property.AzureBlobStorageProperties;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.github.sevtech.cloud.storage.spring.service.impl.AzureBlobStorageService;
@@ -16,7 +17,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 
 @Slf4j
 @Configuration
-@Conditional(AzureBlobStorageConfig.AzureBlobStorageCondition.class)
+@ConditionalOnCloudStorageProperty(value = "azure.blob.storage.enabled")
 public class AzureBlobStorageConfig {
 
     @Bean
@@ -34,14 +35,6 @@ public class AzureBlobStorageConfig {
     @Bean
     public StorageService azureBlobStorageService(BlobServiceClient blobServiceClient) {
         return new AzureBlobStorageService(blobServiceClient);
-    }
-
-    static class AzureBlobStorageCondition implements Condition {
-        @Override
-        public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
-            Boolean condition = conditionContext.getEnvironment().getProperty("azure.blob.storage.enabled", Boolean.class);
-            return condition != null && condition;
-        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.github.sevtech.cloud.storage.spring.config;
 
+import com.github.sevtech.cloud.storage.spring.annotattion.ConditionalOnCloudStorageProperty;
 import com.github.sevtech.cloud.storage.spring.property.GoogleCloudStorageProperties;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.github.sevtech.cloud.storage.spring.service.impl.GoogleCloudStorageService;
@@ -20,7 +21,7 @@ import java.io.IOException;
 
 @Slf4j
 @Configuration
-@Conditional(GoogleCloudStorageConfig.GoogleCloudStorageCondition.class)
+@ConditionalOnCloudStorageProperty(value = "gcp.storage.enabled")
 public class GoogleCloudStorageConfig {
     @Bean
     public GoogleCloudStorageProperties googleCloudStorageProperties(Environment env) {
@@ -41,11 +42,4 @@ public class GoogleCloudStorageConfig {
         return new GoogleCloudStorageService(storageClient);
     }
 
-    static class GoogleCloudStorageCondition implements Condition {
-        @Override
-        public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
-            Boolean condition = conditionContext.getEnvironment().getProperty("gcp.storage.enabled", Boolean.class);
-            return condition != null && condition;
-        }
-    }
 }
