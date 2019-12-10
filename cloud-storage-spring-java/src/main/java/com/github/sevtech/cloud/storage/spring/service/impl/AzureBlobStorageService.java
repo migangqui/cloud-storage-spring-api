@@ -2,7 +2,6 @@ package com.github.sevtech.cloud.storage.spring.service.impl;
 
 import com.amazonaws.util.IOUtils;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlockBlobItem;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest;
 import com.github.sevtech.cloud.storage.spring.bean.DeleteFileResponse;
@@ -41,9 +40,7 @@ public class AzureBlobStorageService implements StorageService {
         UploadFileResponse result;
 
         try {
-            final String containerName = Optional.ofNullable(
-                    Optional.ofNullable(uploadFileRequest.getBucketName()).orElse(defaultContainerName))
-                    .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
+            getBucketName(uploadFileRequest.getBucketName());
 
             final String path = uploadFileRequest.getFolder().concat("/").concat(uploadFileRequest.getName());
 
@@ -51,11 +48,11 @@ public class AzureBlobStorageService implements StorageService {
 
             final BlockBlobClient blockBlobClient = blobContainerClient.getBlobClient(path).getBlockBlobClient();
 
-            BlockBlobItem blobItem = blockBlobClient.upload(streamToUpload, IOUtils.toByteArray(uploadFileRequest.getStream()).length);
+            blockBlobClient.upload(streamToUpload, IOUtils.toByteArray(uploadFileRequest.getStream()).length);
 
-            result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_OK).build();
+            result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_OK).comment(blockBlobClient.getBlobUrl()).build();
 
-        } catch (NoBucketException | IOException e) {
+        } catch (IOException | NoBucketException e) {
             log.warn("Error creating blob");
             result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause("Error creating blob").exception(e).build();
@@ -95,5 +92,11 @@ public class AzureBlobStorageService implements StorageService {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    private String getBucketName(String bucketName) throws NoBucketException {
+        return Optional.ofNullable(
+                Optional.ofNullable(bucketName).orElse(defaultContainerName))
+                .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
     }
 }

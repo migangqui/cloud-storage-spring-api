@@ -52,6 +52,6 @@ public class TestApplication {
 
     @PostMapping("/azure/files")
     public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+        return azureBlobStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
     }
 }

@@ -13,6 +13,14 @@ aws:
     secretKey: foobar
     bucket.name: mytestbucket
   region: us-east-1
+
+azure:
+  blob:
+    storage:
+      enabled: true
+      connectionString: DefaultEndpointsProtocol=https;AccountName=sevtech;AccountKey=UnaEGgyU55km7eI0Tt/nFZDrC1BF7nfKR2u+TafSRN5SsO0XS45Z4zyGknizALdOtj8eqmzUtNI3GY43YWpLZg==;EndpointSuffix=core.windows.net
+      container:
+        name: images
 localstack:
   enabled: true
   endpoint: http://localhost:4572
