@@ -29,7 +29,7 @@
             <artifactId>spring-context</artifactId>
             <version>5.2.1.RELEASE</version>
         </dependency>
-        <!-- Amazon -->
+        <!-- AWS -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
@@ -41,6 +41,7 @@
             <artifactId>google-cloud-storage</artifactId>
             <version>1.61.0</version>
         </dependency>
+        <!-- Azure -->
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>

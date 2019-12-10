@@ -8,6 +8,7 @@ import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
+import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -20,11 +21,10 @@ import org.springframework.scheduling.annotation.AsyncResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.Future;
 
 @Slf4j
-public class GoogleCloudStorageService implements StorageService {
+public class GoogleCloudStorageService extends AbstractStorageService implements StorageService {
 
     @Value("${gcp.storage.bucket.name}")
     private String defaultBucketName;
@@ -40,13 +40,10 @@ public class GoogleCloudStorageService implements StorageService {
         UploadFileResponse result;
 
         try {
-            final String bucketName = Optional.ofNullable(
-                    Optional.ofNullable(uploadFileRequest.getBucketName()).orElse(defaultBucketName))
-                    .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
-            final String path = uploadFileRequest.getFolder().concat("/").concat(uploadFileRequest.getName());
+            final String bucketName = getBucketName(uploadFileRequest.getBucketName(), defaultBucketName);
 
-            final BlobInfo blobInfo = storageClient.create(BlobInfo.newBuilder(bucketName, path)
-//                  .setAcl(new ArrayList<>(Arrays.asList(Acl.of(User.ofAllUsers(), Role.READER))))
+            final BlobInfo blobInfo = storageClient.create(BlobInfo.newBuilder(bucketName, getFilePath(uploadFileRequest))
+//                    .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
                     .build(), IOUtils.toByteArray(uploadFileRequest.getStream()));
             result = UploadFileResponse.builder().fileName(uploadFileRequest.getName()).status(HttpStatus.SC_OK).comment(blobInfo.getMediaLink()).build();
         } catch (NoBucketException | IOException e) {
@@ -68,7 +65,7 @@ public class GoogleCloudStorageService implements StorageService {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try {
-            final byte[] file = storageClient.readAllBytes(BlobId.of(getBucketName(request.getBucketName()), request.getPath()));
+            final byte[] file = storageClient.readAllBytes(BlobId.of(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()));
             result = GetFileResponse.builder().content(new ByteArrayInputStream(file)).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException e) {
             log.error(e.getMessage(), e);
@@ -82,7 +79,7 @@ public class GoogleCloudStorageService implements StorageService {
         log.info("Deleting file from path {}", request.getPath());
         DeleteFileResponse result;
         try {
-            storageClient.delete(BlobId.of(getBucketName(request.getBucketName()), request.getPath()));
+            storageClient.delete(BlobId.of(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()));
             result = DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException e) {
             log.error(e.getMessage(), e);
@@ -91,9 +88,4 @@ public class GoogleCloudStorageService implements StorageService {
         return result;
     }
 
-    private String getBucketName(String bucketName) throws NoBucketException {
-        return Optional.ofNullable(
-                Optional.ofNullable(bucketName).orElse(defaultBucketName))
-                .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
-    }
 }
