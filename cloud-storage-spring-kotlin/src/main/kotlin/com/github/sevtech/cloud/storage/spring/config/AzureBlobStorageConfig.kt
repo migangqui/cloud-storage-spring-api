@@ -6,12 +6,12 @@ import com.github.sevtech.cloud.storage.spring.property.AzureBlobStorageProperti
 import com.github.sevtech.cloud.storage.spring.service.StorageService
 import com.github.sevtech.cloud.storage.spring.service.impl.AzureBlobStorageService
 import mu.KotlinLogging
-import org.springframework.context.annotation.*
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
-import org.springframework.core.type.AnnotatedTypeMetadata
 
 @Configuration
-@Conditional(AzureBlobStorageConfig.AzureBlobStorageCondition::class)
+@ConditionalOnCloudStorageProperty(value = "azure.blob.storage.enabled")
 class AzureBlobStorageConfig {
 
     private val log = KotlinLogging.logger {}
@@ -30,12 +30,5 @@ class AzureBlobStorageConfig {
     @Bean
     fun azureBlobStorageService(blobServiceClient: BlobServiceClient): StorageService {
         return AzureBlobStorageService(blobServiceClient)
-    }
-
-    internal class AzureBlobStorageCondition : Condition {
-        override fun matches(conditionContext: ConditionContext, annotatedTypeMetadata: AnnotatedTypeMetadata): Boolean {
-            val condition = conditionContext.environment.getProperty("azure.blob.storage.enabled", Boolean::class.java)
-            return condition != null && condition
-        }
     }
 }

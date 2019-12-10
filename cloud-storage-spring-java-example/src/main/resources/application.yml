@@ -18,9 +18,9 @@ azure:
   blob:
     storage:
       enabled: false
-      connectionString: "yourconnectionstring"
+      connectionString: "DefaultEndpointsProtocol=https;AccountName=migangqui;AccountKey=REW3dbV6vaGKAwRD4M7dYSzUowHJdST2pSdFf7uplgR6vEwSTRfuoZgb15HvQ/muiGlYPQzsIeVvcU06GIhGGw==;EndpointSuffix=core.windows.net"
       container:
-        name: images
+        name: prueba1
 localstack:
   enabled: true
   endpoint: http://localhost:4572

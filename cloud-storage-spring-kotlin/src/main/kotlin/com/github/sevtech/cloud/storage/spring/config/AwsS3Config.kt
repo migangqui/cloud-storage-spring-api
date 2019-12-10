@@ -5,17 +5,16 @@ import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.github.sevtech.cloud.storage.spring.config.AwsS3Config.AwsS3Condition
 import com.github.sevtech.cloud.storage.spring.property.AwsS3Properties
 import com.github.sevtech.cloud.storage.spring.service.StorageService
 import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service
 import mu.KotlinLogging
-import org.springframework.context.annotation.*
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
-import org.springframework.core.type.AnnotatedTypeMetadata
 
 @Configuration
-@Conditional(AwsS3Condition::class)
+@ConditionalOnCloudStorageProperty(value = "aws.s3.enabled")
 class AwsS3Config() {
 
     private val log = KotlinLogging.logger {}
@@ -58,14 +57,5 @@ class AwsS3Config() {
     @Bean
     fun awsS3Service(awsS3Client: AmazonS3): StorageService {
         return AwsS3Service(awsS3Client)
-    }
-
-    internal class AwsS3Condition : Condition {
-        override fun matches(
-            conditionContext: ConditionContext,
-            annotatedTypeMetadata: AnnotatedTypeMetadata
-        ): Boolean {
-            return conditionContext.environment.getProperty("aws.s3.enabled") != null
-        }
     }
 }

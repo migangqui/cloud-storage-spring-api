@@ -1,12 +1,27 @@
 server:
   port: 9090
+gcp:
+  storage:
+    enabled: false
+    bucket:
+      name: migangqui-sample
+    keyfile: "where-you-keyfile"
 aws:
   s3:
+    enabled: false
     accessKey: foobar
     secretKey: foobar
     bucket.name: mytestbucket
   region: us-east-1
+
+azure:
+  blob:
+    storage:
+      enabled: true
+      connectionString: "DefaultEndpointsProtocol=https;AccountName=migangqui;AccountKey=REW3dbV6vaGKAwRD4M7dYSzUowHJdST2pSdFf7uplgR6vEwSTRfuoZgb15HvQ/muiGlYPQzsIeVvcU06GIhGGw==;EndpointSuffix=core.windows.net"
+      container:
+        name: prueba1
 localstack:
-  enabled: true
+  enabled: false
   endpoint: http://localhost:4572
   region: us-east-1
