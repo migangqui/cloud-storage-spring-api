@@ -8,7 +8,7 @@ gcp:
     keyfile: "where-you-keyfile"
 aws:
   s3:
-    enabled: false
+    enabled: true
     accessKey: foobar
     secretKey: foobar
     bucket.name: mytestbucket
@@ -17,7 +17,7 @@ aws:
 azure:
   blob:
     storage:
-      enabled: true
+      enabled: false
       connectionString: "yourconnectionstring"
       container:
         name: images
