@@ -31,6 +31,8 @@ public class TestApplication {
     private StorageService awsS3Service;
     @Autowired
     private StorageService googleCloudStorageService;
+    @Autowired
+    private StorageService azureBlobStorageService;
 
     /* AWS */
 
@@ -43,6 +45,13 @@ public class TestApplication {
 
     @PostMapping("/gcp/files")
     public UploadFileResponse uploadFileGcp(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
+        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+    }
+
+    /* Azure*/
+
+    @PostMapping("/azure/files")
+    public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
         return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
     }
 }

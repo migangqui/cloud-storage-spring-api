@@ -41,6 +41,11 @@
             <artifactId>google-cloud-storage</artifactId>
             <version>1.61.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob</artifactId>
+            <version>12.1.0</version>
+        </dependency>
     </dependencies>
 
 </project>
