@@ -16,6 +16,7 @@ import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
+import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -24,14 +25,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.util.StringUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Optional;
 import java.util.concurrent.Future;
 
 @Slf4j
-public class AwsS3Service implements StorageService {
+public class AwsS3Service extends AbstractStorageService implements StorageService {
 
     @Value("${aws.s3.bucket.name}")
     private String defaultBucketName;
@@ -57,12 +55,10 @@ public class AwsS3Service implements StorageService {
                 metadata.setCacheControl("s-maxage");
             }
 
-            final String path = request.getFolder().concat("/").concat(request.getName());
-
-            final PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(request.getBucketName()), path, streamToUpload, metadata)
+            final PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), getFilePath(request), streamToUpload, metadata)
                     .withCannedAcl(request.getAccessControl());
 
-            log.debug("Uploading file to {}", path);
+            log.debug("Uploading file to {}", getFilePath(request));
 
             awsS3Client.putObject(putObjectRequest);
 
@@ -94,7 +90,7 @@ public class AwsS3Service implements StorageService {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try {
-            final S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName()), request.getPath()));
+            final S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()));
             result = GetFileResponse.builder().content(s3Object.getObjectContent()).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException e) {
             log.error(e.getMessage(), e);
@@ -108,7 +104,7 @@ public class AwsS3Service implements StorageService {
         log.info("Deleting file from path {}", request.getPath());
         DeleteFileResponse result;
         try {
-            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(getBucketName(request.getBucketName()), request.getPath());
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath());
             awsS3Client.deleteObject(deleteObjectRequest);
             result = DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
         } catch (AmazonServiceException ase) {
@@ -140,31 +136,6 @@ public class AwsS3Service implements StorageService {
         log.error("Caught an AmazonClientException, which means the client encountered "
                 + "an internal error while trying to communicate with S3, such as not being able to access the network.");
         log.error("Error Message: " + ace.getMessage());
-    }
-
-    private InputStream clone(final InputStream inputStream) {
-        InputStream result = null;
-        try {
-            inputStream.mark(0);
-            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            final byte[] buffer = new byte[1024];
-            int readLength;
-            while ((readLength = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, readLength);
-            }
-            inputStream.reset();
-            outputStream.flush();
-            result = new ByteArrayInputStream(outputStream.toByteArray());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return result;
-    }
-
-    private String getBucketName(String bucketName) throws NoBucketException {
-        return Optional.ofNullable(
-                Optional.ofNullable(bucketName).orElse(defaultBucketName))
-                .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
     }
 }
 
