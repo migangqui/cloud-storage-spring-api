@@ -4,7 +4,6 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.github.sevtech.cloud.storage.spring.annotattion.ConditionalOnCloudStorageProperty;
 import com.github.sevtech.cloud.storage.spring.property.AwsS3Properties;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service;
