@@ -135,7 +135,7 @@ interface StorageService {
 
 ### Model
 
-####Upload
+#### Upload
 
 *UploadFileRequest*
 
@@ -154,7 +154,7 @@ interface StorageService {
 * **exception (Exception)**: exception.
 * **comment (String)**: optional comment.
 
-####Get
+#### Get
 
 *GetFileRequest*
 
@@ -168,7 +168,7 @@ interface StorageService {
 * **cause (String)**: cause of the fail.
 * **exception (Exception)**: exception.
 
-####Delete
+#### Delete
 
 *DeleteFileRequest*
 
