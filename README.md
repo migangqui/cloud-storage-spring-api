@@ -74,10 +74,12 @@ gcp:
 To Azure Blob Storage:
 ```yaml
 azure:
-  storage:
-    enabled: true
-    bucket:
-      name: yourbucketname
+  blob:
+    storage:
+      enabled: true
+      connectionString: "your-connection-string"
+      container:
+        name: yourbucketname
 ```
 
 ## Enable async

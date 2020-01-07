@@ -23,7 +23,27 @@ fun main(args: Array<String>) {
 @RequestMapping("/")
 class MediaController(private val azureBlobStorageService: StorageService) {
 
+
+    /* AWS */
+
+    /* AWS */
+//    @PostMapping("/aws/files")
+//    @Throws(IOException::class)
+//    fun uploadFileAws(@RequestBody file: MultipartFile, @RequestParam folder: String?, @RequestParam name: String?): UploadFileResponse? {
+//        return awsS3Service.uploadFile(UploadFileRequest.builder().stream(ByteArrayInputStream(file.bytes)).folder(folder).name(name).contentType(file.contentType).build())
+//    }
+//
+//    /* Google Cloud */
+//
+//    /* Google Cloud */
+//    @PostMapping("/gcp/files")
+//    @Throws(IOException::class)
+//    fun uploadFileGcp(@RequestBody file: MultipartFile, @RequestParam folder: String?, @RequestParam name: String?): UploadFileResponse? {
+//        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(ByteArrayInputStream(file.bytes)).folder(folder).name(name).contentType(file.contentType).build())
+//    }
+
     /* Azure*/
+
     @PostMapping("/azure/files")
     @Throws(IOException::class)
     fun uploadFileAzure(@RequestBody file: MultipartFile, @RequestParam name: String, @RequestParam folder: String): UploadFileResponse {
