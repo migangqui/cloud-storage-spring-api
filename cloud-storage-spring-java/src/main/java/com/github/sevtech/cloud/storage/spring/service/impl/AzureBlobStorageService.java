@@ -1,10 +1,8 @@
 package com.github.sevtech.cloud.storage.spring.service.impl;
 
 import com.amazonaws.util.IOUtils;
-import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.models.BlobHttpHeaders;
-import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest;
 import com.github.sevtech.cloud.storage.spring.bean.DeleteFileResponse;
@@ -20,7 +18,6 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.AsyncResult;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,14 +67,18 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
 
     @Override
     public GetFileResponse getFile(GetFileRequest request) {
-
-            try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                final BlobClient blockBlobClient = blobServiceClient.getBlobContainerClient(getBucketName(request.getBucketName(), defaultContainerName)).getBlobClient(request.getPath());
-                blockBlobClient.download(outputStream);
-            } catch (IOException | NoBucketException e) {
-                e.printStackTrace();
-            }
-            return GetFileResponse.builder().status(HttpStatus.SC_OK).build();
+        log.info("Reading file from Azure {}", request.getPath());
+        GetFileResponse result;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            final String bucketName = getBucketName(request.getBucketName(), defaultContainerName);
+            final BlockBlobClient blockBlobClient = blobServiceClient.getBlobContainerClient(bucketName).getBlobClient(request.getPath()).getBlockBlobClient();
+            blockBlobClient.download(outputStream);
+            result = GetFileResponse.builder().content(outputStream.toByteArray()).status(HttpStatus.SC_OK).build();
+        } catch (IOException | NoBucketException e) {
+            log.error(e.getMessage(), e);
+            result = GetFileResponse.builder().cause(e.getMessage()).exception(e).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+        return result;
     }
 
     @Override

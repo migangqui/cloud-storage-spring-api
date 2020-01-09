@@ -66,7 +66,7 @@ public class GoogleCloudStorageService extends AbstractStorageService implements
         GetFileResponse result;
         try {
             final byte[] file = storageClient.readAllBytes(BlobId.of(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()));
-            result = GetFileResponse.builder().content(new ByteArrayInputStream(file)).status(HttpStatus.SC_OK).build();
+            result = GetFileResponse.builder().content(file).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException e) {
             log.error(e.getMessage(), e);
             result = GetFileResponse.builder().cause(e.getMessage()).exception(e).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();

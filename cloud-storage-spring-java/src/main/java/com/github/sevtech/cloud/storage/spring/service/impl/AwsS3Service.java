@@ -25,6 +25,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Future;
 
@@ -89,10 +90,10 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
     public GetFileResponse getFile(GetFileRequest request) {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
-        try {
-            final S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()));
-            result = GetFileResponse.builder().content(s3Object.getObjectContent()).status(HttpStatus.SC_OK).build();
-        } catch (NoBucketException e) {
+        try (S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()))) {
+            final byte[] file = new byte[s3Object.getObjectContent().available()];
+            result = GetFileResponse.builder().content(file).status(HttpStatus.SC_OK).build();
+        } catch (NoBucketException | IOException e) {
             log.error(e.getMessage(), e);
             result = GetFileResponse.builder().cause(e.getMessage()).exception(e).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }

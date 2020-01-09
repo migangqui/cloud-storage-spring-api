@@ -20,7 +20,7 @@ azure:
   blob:
     storage:
       enabled: true
-      connectionString: 
+      connectionString: "your-connection-string"
       container:
         name: prueba1
 
