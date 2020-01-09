@@ -1,9 +1,6 @@
 package com.github.sevtech.cloud.storage.spring.java.example;
 
-import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
+import com.github.sevtech.cloud.storage.spring.bean.*;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -55,7 +52,12 @@ public class TestApplication {
     }
 
     @GetMapping("/azure/files")
-    public int getFileAzure(@RequestParam String name) throws IOException {
-        return azureBlobStorageService.getFile(GetFileRequest.builder().path(name).build()).getStatus();
+    public byte[] getFileAzure(@RequestParam String name) throws IOException {
+        return azureBlobStorageService.getFile(GetFileRequest.builder().path(name).build()).getContent();
+    }
+
+    @DeleteMapping("/azure/files")
+    public int deleteFileAzure(@RequestParam String name) throws IOException {
+        return azureBlobStorageService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
     }
 }

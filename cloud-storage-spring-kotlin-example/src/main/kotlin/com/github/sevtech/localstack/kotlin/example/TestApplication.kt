@@ -1,5 +1,7 @@
 package com.github.sevtech.localstack.kotlin.example
 
+import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest
+import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse
 import com.github.sevtech.cloud.storage.spring.service.StorageService
@@ -49,6 +51,19 @@ class MediaController(private val azureBlobStorageService: StorageService) {
     fun uploadFileAzure(@RequestBody file: MultipartFile, @RequestParam name: String, @RequestParam folder: String): UploadFileResponse {
         return azureBlobStorageService.uploadFile(UploadFileRequest(stream = ByteArrayInputStream(file.bytes), folder = folder, name = name, contentType = file.contentType!!))
     }
+
+    @GetMapping("/azure/files")
+    @Throws(IOException::class)
+    fun getFileAzure(@RequestParam name: String): ByteArray? {
+        return azureBlobStorageService.getFile(GetFileRequest(path = name)).content
+    }
+
+    @DeleteMapping("/azure/files")
+    @Throws(IOException::class)
+    fun deleteFileAzure(@RequestParam name: String): Int {
+        return azureBlobStorageService.deleteFile(DeleteFileRequest(path = name)).status
+    }
+
 }
 
 

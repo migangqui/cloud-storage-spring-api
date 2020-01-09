@@ -4,12 +4,7 @@ import com.amazonaws.util.IOUtils;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import com.azure.storage.blob.specialized.BlockBlobClient;
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
+import com.github.sevtech.cloud.storage.spring.bean.*;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
@@ -40,11 +35,9 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
         UploadFileResponse result;
 
         try {
-            final String bucketName = getBucketName(uploadFileRequest.getBucketName(), defaultContainerName);
-
             final InputStream streamToUpload = clone(uploadFileRequest.getStream());
 
-            final BlockBlobClient blockBlobClient = blobServiceClient.getBlobContainerClient(bucketName).getBlobClient(getFilePath(uploadFileRequest)).getBlockBlobClient();
+            final BlockBlobClient blockBlobClient = getBlobClient(uploadFileRequest.getBucketName(), getFilePath(uploadFileRequest));
 
             BlobHttpHeaders headers = new BlobHttpHeaders();
             headers.setContentType(uploadFileRequest.getContentType());
@@ -70,8 +63,7 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
         log.info("Reading file from Azure {}", request.getPath());
         GetFileResponse result;
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            final String bucketName = getBucketName(request.getBucketName(), defaultContainerName);
-            final BlockBlobClient blockBlobClient = blobServiceClient.getBlobContainerClient(bucketName).getBlobClient(request.getPath()).getBlockBlobClient();
+            final BlockBlobClient blockBlobClient = getBlobClient(request.getBucketName(), request.getPath());
             blockBlobClient.download(outputStream);
             result = GetFileResponse.builder().content(outputStream.toByteArray()).status(HttpStatus.SC_OK).build();
         } catch (IOException | NoBucketException e) {
@@ -83,7 +75,20 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
 
     @Override
     public DeleteFileResponse deleteFile(DeleteFileRequest request) {
+        log.info("Deleting file from Azure {}", request.getPath());
+        DeleteFileResponse result;
+        try {
+            final BlockBlobClient blockBlobClient = getBlobClient(request.getBucketName(), request.getPath());
+            blockBlobClient.delete();
+            result = DeleteFileResponse.builder().status(HttpStatus.SC_OK).build();
+        } catch (NoBucketException e) {
+            log.error(e.getMessage(), e);
+            result = DeleteFileResponse.builder().cause(e.getMessage()).exception(e).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        }
+        return result;
+    }
 
-        return null;
+    private BlockBlobClient getBlobClient(final String bucketName, final String path) throws NoBucketException {
+        return blobServiceClient.getBlobContainerClient(getBucketName(bucketName, defaultContainerName)).getBlobClient(path).getBlockBlobClient();
     }
 }
