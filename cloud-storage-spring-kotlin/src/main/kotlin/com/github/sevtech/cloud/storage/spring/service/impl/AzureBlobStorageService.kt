@@ -11,6 +11,7 @@ import mu.KotlinLogging
 import org.apache.http.HttpStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.AsyncResult
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.Future
@@ -20,27 +21,25 @@ class AzureBlobStorageService(private val blobServiceClient: BlobServiceClient) 
     private val log = KotlinLogging.logger {}
 
     @Value("\${azure.blob.storage.container.name}")
-    private lateinit var defaultBucketName: String
+    private lateinit var defaultContainerName: String
 
     override fun uploadFile(request: UploadFileRequest): UploadFileResponse {
-        var result: UploadFileResponse
-        try {
-            val bucketName = getBucketName(request.bucketName, defaultBucketName)
+        return try {
+            val bucketName = getBucketName(request.bucketName, defaultContainerName)
             val streamToUpload: InputStream? = request.stream.clone()
             val blockBlobClient = blobServiceClient.getBlobContainerClient(bucketName).getBlobClient(getFilePath(request)).blockBlobClient
             val headers = BlobHttpHeaders()
             headers.contentType = request.contentType
             blockBlobClient.upload(streamToUpload, IOUtils.toByteArray(request.stream).size.toLong())
             blockBlobClient.setHttpHeaders(headers)
-            result = UploadFileResponse(fileName = request.name, status = HttpStatus.SC_OK, comment = blockBlobClient.blobUrl)
+            UploadFileResponse(fileName = request.name, status = HttpStatus.SC_OK, comment = blockBlobClient.blobUrl)
         } catch (e: IOException) {
             log.warn("Error creating blob")
-            result = UploadFileResponse(fileName = request.name, status = HttpStatus.SC_INTERNAL_SERVER_ERROR, cause = "Error creating blob", exception = e)
+            UploadFileResponse(fileName = request.name, status = HttpStatus.SC_INTERNAL_SERVER_ERROR, cause = "Error creating blob", exception = e)
         } catch (e: NoBucketException) {
             log.warn("Error creating blob")
-            result = UploadFileResponse(fileName = request.name, status = HttpStatus.SC_INTERNAL_SERVER_ERROR, cause = "Error creating blob", exception = e)
+            UploadFileResponse(fileName = request.name, status = HttpStatus.SC_INTERNAL_SERVER_ERROR, cause = "Error creating blob", exception = e)
         }
-        return result
     }
 
     override fun uploadFileAsync(request: UploadFileRequest): Future<UploadFileResponse> {
@@ -48,7 +47,20 @@ class AzureBlobStorageService(private val blobServiceClient: BlobServiceClient) 
     }
 
     override fun getFile(request: GetFileRequest): GetFileResponse {
-        TODO()
+        log.info("Reading file from Azure {}", request.path)
+        return try {
+            val outputStream = ByteArrayOutputStream()
+            val bucketName = getBucketName(request.bucketName, defaultContainerName)
+            val blockBlobClient = blobServiceClient.getBlobContainerClient(bucketName).getBlobClient(request.path).blockBlobClient
+            blockBlobClient.download(outputStream)
+            GetFileResponse(content = outputStream.toByteArray(), status = HttpStatus.SC_OK)
+        } catch (e: IOException) {
+            log.error(e.message, e)
+            GetFileResponse(cause = e.message, exception = e, status = HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        } catch (e: NoBucketException) {
+            log.error(e.message, e)
+            GetFileResponse(cause = e.message, exception = e, status = HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        }
     }
 
     override fun deleteFile(request: DeleteFileRequest): DeleteFileResponse {

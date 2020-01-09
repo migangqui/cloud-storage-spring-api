@@ -78,7 +78,7 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
         val result: GetFileResponse
         result = try {
             val s3Object: S3Object = s3Client.getObject(GetObjectRequest(getBucketName(request.bucketName), request.path))
-            GetFileResponse(content = s3Object.objectContent, status = HttpStatus.SC_OK)
+            GetFileResponse(content = IOUtils.toByteArray(s3Object.objectContent), status = HttpStatus.SC_OK)
         } catch (e: NoBucketException) {
             log.error(e.message, e)
             GetFileResponse(cause = e.message, exception = e, status = HttpStatus.SC_INTERNAL_SERVER_ERROR)

@@ -91,7 +91,7 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try (S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()))) {
-            final byte[] file = new byte[s3Object.getObjectContent().available()];
+            final byte[] file = IOUtils.toByteArray(s3Object.getObjectContent());
             result = GetFileResponse.builder().content(file).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException | IOException e) {
             log.error(e.getMessage(), e);
