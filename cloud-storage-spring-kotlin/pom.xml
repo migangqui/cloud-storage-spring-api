@@ -14,7 +14,7 @@
 	<packaging>jar</packaging>
 
 	<name>cloud-storage-spring-kotlin</name>
-	<description>Spring Cloud Storage Java API to AWS, GCloud and Azure</description>
+	<description>Spring Cloud Storage Kotlin API to AWS, GCloud and Azure</description>
 
 	<url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
 	<developers>
@@ -45,7 +45,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<kotlin.version>1.2.71</kotlin.version>
+		<kotlin.version>1.3.61</kotlin.version>
 	</properties>
 
 	<dependencies>

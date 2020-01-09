@@ -52,17 +52,17 @@ class MediaController(private val azureBlobStorageService: StorageService) {
         return azureBlobStorageService.uploadFile(UploadFileRequest(stream = ByteArrayInputStream(file.bytes), folder = folder, name = name, contentType = file.contentType!!))
     }
 
-    @GetMapping("/azure/files")
-    @Throws(IOException::class)
-    fun getFileAzure(@RequestParam name: String): ByteArray? {
-        return azureBlobStorageService.getFile(GetFileRequest(path = name)).content
-    }
-
-    @DeleteMapping("/azure/files")
-    @Throws(IOException::class)
-    fun deleteFileAzure(@RequestParam name: String): Int {
-        return azureBlobStorageService.deleteFile(DeleteFileRequest(path = name)).status
-    }
+//    @GetMapping("/azure/files")
+//    @Throws(IOException::class)
+//    fun getFileAzure(@RequestParam name: String): ByteArray? {
+//        return azureBlobStorageService.getFile(GetFileRequest(path = name)).content
+//    }
+//
+//    @DeleteMapping("/azure/files")
+//    @Throws(IOException::class)
+//    fun deleteFileAzure(@RequestParam name: String): Int {
+//        return azureBlobStorageService.deleteFile(DeleteFileRequest(path = name)).status
+//    }
 
 }
 

@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>cloud-storage-spring-java-example</name>
-	<description>Spring AWS S3 API Java example</description>
+	<description>Spring Storage Library Java example</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

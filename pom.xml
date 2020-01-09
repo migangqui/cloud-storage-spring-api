@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <name>cloud-storage-spring</name>
-    <description>Spring AWS S3 Libraries</description>
+    <description>Spring Cloud Storage Java and Kotlin API to AWS, GCloud and Azure</description>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

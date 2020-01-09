@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>cloud-storage-spring-kotlin-example</name>
-	<description>Spring AWS S3 API Kotlin example</description>
+	<description>Spring Storage Library Kotlin example</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<kotlin.version>1.2.51</kotlin.version>
+		<kotlin.version>1.3.61</kotlin.version>
 	</properties>
 
 	<dependencies>

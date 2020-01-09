@@ -214,6 +214,7 @@ Here we are the AWS CLI S3 command options: <https://docs.aws.amazon.com/en_en/c
 
 ## Next adds
 * Support to Alibaba Cloud Object Storage Service (<https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v>)
+* File permissions management
 
 ## License
 
