@@ -1,11 +1,13 @@
 server:
   port: 9090
+
 gcp:
   storage:
     enabled: false
     bucket:
       name: migangqui-sample
     keyfile: "where-you-keyfile"
+
 aws:
   s3:
     enabled: false
@@ -17,10 +19,11 @@ aws:
 azure:
   blob:
     storage:
-      enabled: false
-      connectionString: "your-connection-string"
+      enabled: true
+      connectionString: 
       container:
         name: prueba1
+
 localstack:
   enabled: false
   endpoint: http://localhost:4572

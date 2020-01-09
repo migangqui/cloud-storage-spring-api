@@ -1,5 +1,7 @@
 package com.github.sevtech.cloud.storage.spring.java.example;
 
+import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest;
+import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
@@ -7,11 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -54,5 +52,10 @@ public class TestApplication {
     @PostMapping("/azure/files")
     public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
         return azureBlobStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+    }
+
+    @GetMapping("/azure/files")
+    public int getFileAzure(@RequestParam String name) throws IOException {
+        return azureBlobStorageService.getFile(GetFileRequest.builder().path(name).build()).getStatus();
     }
 }
