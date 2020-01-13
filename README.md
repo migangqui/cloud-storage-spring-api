@@ -74,10 +74,12 @@ gcp:
 To Azure Blob Storage:
 ```yaml
 azure:
-  storage:
-    enabled: true
-    bucket:
-      name: yourbucketname
+  blob:
+    storage:
+      enabled: true
+      connectionString: "your-connection-string"
+      container:
+        name: yourbucketname
 ```
 
 ## Enable async
@@ -94,34 +96,6 @@ spring:
             max-file-size: 128KB
             max-request-size: 128KB
 ```
-
-## Test in local
-
-### AWS S3: Localstack support
-
-This library can be tested with Localstack (<https://github.com/localstack/localstack>).
-You only have to set the following properties in your application.yml:
-
-```yaml
-localstack:
-  enabled: false (by default)
-  endpoint: http://localhost:4572
-  region: us-east-1
-```
-
-In order to run easily Localstack, I have added ```docker-compose.yml``` file to the folder ```localstack```. 
-You have run the command ```docker-compose up``` to make it work.
-
-I hardly recommend install AWS CLI in your local. It helps you to manage the buckets to run the tests with Localstack.
-Here you are the documentation to install the version 2: <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html>
-
-To create a local bucket you must run this command `aws2 --endpoint-url=http://localhost:4572 s3 mb s3://mytestbucket`
-
-To check out if the bucket has been created run this command `aws2 --endpoint-url=http://localhost:4572 s3 ls`
-
-When you create a bucket, you have to add `yourbucketname.localhost` to your hosts local file mapped to `127.0.0.1`.
-
-Here we are the AWS CLI S3 command options: <https://docs.aws.amazon.com/en_en/cli/latest/userguide/cli-services-s3-commands.html>
 
 ## How to use
 
@@ -160,6 +134,87 @@ interface StorageService {
 
 }
 ```
+
+### Model
+
+#### Upload
+
+*UploadFileRequest*
+
+* **stream (InputStream)**: content of your file.
+* **folder (String)**: folder where you want to save the file. Ex: folder/subfolder1/subfolder2
+* **name (String)**: name of the uploaded file. Ex: image.jpg, image
+* **contentType (String)**: type of content of the file.
+* **bucketName (String, optional)**
+* **accessControl**
+
+*UploadFileResponse*
+
+* **fileName (String)**: final name of the uploaded file.
+* **status (int)**: status of the operation. 200 OK or 500 KO.
+* **cause (String)**: cause of the fail.
+* **exception (Exception)**: exception.
+* **comment (String)**: optional comment.
+
+#### Get
+
+*GetFileRequest*
+
+* **path (String)**: complete path where you want to get the file from. Ex: folder/subfolder1/subfolder2/file.jpg
+* **bucketName (String, optional)**
+
+*GetFileResponse*
+
+* **stream (InputStream)**: content of your file.
+* **status (int)**: status of the operation. 200 OK or 500 KO.
+* **cause (String)**: cause of the fail.
+* **exception (Exception)**: exception.
+
+#### Delete
+
+*DeleteFileRequest*
+
+* **path (String)**: complete path where you want to get the file from. Ex: folder/subfolder1/subfolder2/file.jpg
+* **bucketName (String, optional)**
+
+*DeleteFileResponse*
+
+* **result boolean)**: result of the deletion. true ok or false ko.
+* **status (int)**: status of the operation. 200 OK or 500 KO.
+* **cause (String)**: cause of the fail.
+* **exception (Exception)**: exception.
+
+## Test in local
+
+### AWS S3: Localstack support
+
+This library can be tested with Localstack (<https://github.com/localstack/localstack>).
+You only have to set the following properties in your application.yml:
+
+```yaml
+localstack:
+  enabled: false (by default)
+  endpoint: http://localhost:4572
+  region: us-east-1
+```
+
+In order to run easily Localstack, I have added ```docker-compose.yml``` file to the folder ```localstack```. 
+You have run the command ```docker-compose up``` to make it work.
+
+I hardly recommend install AWS CLI in your local. It helps you to manage the buckets to run the tests with Localstack.
+Here you are the documentation to install the version 2: <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html>
+
+To create a local bucket you must run this command `aws2 --endpoint-url=http://localhost:4572 s3 mb s3://mytestbucket`
+
+To check out if the bucket has been created run this command `aws2 --endpoint-url=http://localhost:4572 s3 ls`
+
+When you create a bucket, you have to add `yourbucketname.localhost` to your hosts local file mapped to `127.0.0.1`.
+
+Here we are the AWS CLI S3 command options: <https://docs.aws.amazon.com/en_en/cli/latest/userguide/cli-services-s3-commands.html>
+
+## Next adds
+* Support to Alibaba Cloud Object Storage Service (<https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v>)
+* File permissions management
 
 ## License
 

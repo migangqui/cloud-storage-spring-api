@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=GoogleCloudStorageConfig,AwsS3Config
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.github.sevtech.cloud.storage.spring.config.GoogleCloudStorageConfig,com.github.sevtech.cloud.storage.spring.config.AwsS3Config,com.github.sevtech.cloud.storage.spring.config.AzureBlobStorageConfig

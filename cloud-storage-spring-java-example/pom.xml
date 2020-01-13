@@ -9,12 +9,12 @@
 	<packaging>jar</packaging>
 
 	<name>cloud-storage-spring-java-example</name>
-	<description>Spring AWS S3 API Java example</description>
+	<description>Spring Storage Library Java example</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.5.RELEASE</version>
+		<version>2.2.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 

@@ -12,7 +12,6 @@ import org.apache.http.HttpStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.AsyncResult
-import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.Future
@@ -79,7 +78,7 @@ class GoogleCloudStorageService(private val storageClient: Storage) : StorageSer
         val result: GetFileResponse
         result = try {
             val file = storageClient.readAllBytes(BlobId.of(getBucketName(request.bucketName), request.path))
-            GetFileResponse(content = ByteArrayInputStream(file), status = HttpStatus.SC_OK)
+            GetFileResponse(content = file, status = HttpStatus.SC_OK)
         } catch (e: NoBucketException) {
             log.error(e.message, e)
             GetFileResponse(cause = e.message, exception = e, status = HttpStatus.SC_INTERNAL_SERVER_ERROR)

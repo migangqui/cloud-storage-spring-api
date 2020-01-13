@@ -1,12 +1,27 @@
 server:
   port: 9090
+gcp:
+  storage:
+    enabled: false
+    bucket:
+      name: migangqui-sample
+    keyfile: "where-you-keyfile"
 aws:
   s3:
-    accessKey: foobar
-    secretKey: foobar
+    enabled: false
+    accessKey: "your-access-key"
+    secretKey: "your-secret-key"
     bucket.name: mytestbucket
   region: us-east-1
+
+azure:
+  blob:
+    storage:
+      enabled: false
+      connectionString: "your-connection-string"
+      container:
+        name: prueba1
 localstack:
-  enabled: true
+  enabled: false
   endpoint: http://localhost:4572
   region: us-east-1

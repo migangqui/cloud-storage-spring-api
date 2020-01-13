@@ -9,18 +9,14 @@ import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Condition;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import static com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 
 @Slf4j
 @Configuration
-@Conditional(AwsS3Config.AwsS3Condition.class)
+@ConditionalOnCloudStorageProperty(value = "aws.s3.enabled")
 public class AwsS3Config {
 
     @Bean
@@ -52,13 +48,6 @@ public class AwsS3Config {
     @Bean
     public StorageService awsS3Service(AmazonS3 awsS3Client) {
         return new AwsS3Service(awsS3Client);
-    }
-
-    static class AwsS3Condition implements Condition {
-        @Override
-        public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
-            return conditionContext.getEnvironment().getProperty("aws.s3.enabled") != null;
-        }
     }
 
 }

@@ -8,19 +8,15 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Condition;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
 @Slf4j
 @Configuration
-@Conditional(GoogleCloudStorageConfig.GoogleCloudStorageCondition.class)
+@ConditionalOnCloudStorageProperty(value = "gcp.storage.enabled")
 public class GoogleCloudStorageConfig {
     @Bean
     public GoogleCloudStorageProperties googleCloudStorageProperties(Environment env) {
@@ -41,10 +37,4 @@ public class GoogleCloudStorageConfig {
         return new GoogleCloudStorageService(storageClient);
     }
 
-    static class GoogleCloudStorageCondition implements Condition {
-        @Override
-        public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
-            return conditionContext.getEnvironment().getProperty("gcp.storage.enabled") != null;
-        }
-    }
 }
