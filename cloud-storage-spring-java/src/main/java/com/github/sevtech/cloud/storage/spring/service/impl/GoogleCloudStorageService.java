@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.concurrent.Future;
 
