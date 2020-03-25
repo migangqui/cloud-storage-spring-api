@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.sevtech</groupId>
+    <groupId>com.github.sevtech-dev</groupId>
     <artifactId>cloud-storage-spring</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>

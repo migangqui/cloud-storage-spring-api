@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.sevtech</groupId>
+	<groupId>com.github.sevtech-dev</groupId>
 	<artifactId>cloud-storage-spring-kotlin-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -43,7 +43,7 @@
 			<artifactId>kotlin-reflect</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.sevtech</groupId>
+			<groupId>com.github.sevtech-dev</groupId>
 			<artifactId>cloud-storage-spring-kotlin</artifactId>
 			<version>1.0.0</version>
 		</dependency>

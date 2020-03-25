@@ -14,7 +14,7 @@ If you use Java:
 
 ```xml
 <dependency>
-	<groupId>com.github.sevtech</groupId>
+	<groupId>com.github.sevtech-dev</groupId>
 	<artifactId>cloud-storage-spring-java</artifactId>
 	<version>${currentVersion}</version>
 </dependency>
@@ -24,7 +24,7 @@ If you use Kotlin:
 
 ```xml
 <dependency>
-	<groupId>com.github.sevtech</groupId>
+	<groupId>com.github.sevtech-dev</groupId>
 	<artifactId>cloud-storage-spring-kotlin</artifactId>
 	<version>${currentVersion}</version>
 </dependency>
