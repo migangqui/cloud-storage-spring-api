@@ -30,7 +30,7 @@ If you use Kotlin:
 </dependency>
 ```
 
-```${currentVersion}``` right now is ```1.0.0.RC```
+```${currentVersion}``` right now is ```1.0.0```
 
 ## Configuration
 
