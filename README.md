@@ -213,7 +213,7 @@ When you create a bucket, you have to add `yourbucketname.localhost` to your hos
 Here we are the AWS CLI S3 command options: <https://docs.aws.amazon.com/en_en/cli/latest/userguide/cli-services-s3-commands.html>
 
 ## Next adds
-* Support to Alibaba Cloud Object Storage Service (<https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v>)
+* Support to Alibaba Cloud Object Storage Service (<https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v>), Dropbox, Google Drive...
 * File permissions management
 
 ## License
