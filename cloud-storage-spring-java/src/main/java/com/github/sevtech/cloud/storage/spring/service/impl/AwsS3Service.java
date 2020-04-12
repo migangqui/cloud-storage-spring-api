@@ -18,6 +18,7 @@ import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,16 +31,13 @@ import java.io.InputStream;
 import java.util.concurrent.Future;
 
 @Slf4j
+@RequiredArgsConstructor
 public class AwsS3Service extends AbstractStorageService implements StorageService {
 
     @Value("${aws.s3.bucket.name}")
     private String defaultBucketName;
 
-    private AmazonS3 awsS3Client;
-
-    public AwsS3Service(AmazonS3 awsS3Client) {
-        this.awsS3Client = awsS3Client;
-    }
+    private final AmazonS3 awsS3Client;
 
     @Override
     public UploadFileResponse uploadFile(UploadFileRequest request) {

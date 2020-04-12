@@ -1,5 +1,9 @@
 server:
   port: 9090
+dropbox:
+  enabled: true
+  accessToken: "accessToken"
+  clientIdentifier: "clientIdentifier"
 
 gcp:
   storage:
@@ -19,7 +23,7 @@ aws:
 azure:
   blob:
     storage:
-      enabled: true
+      enabled: false
       connectionString: "your-connection-string"
       container:
         name: prueba1

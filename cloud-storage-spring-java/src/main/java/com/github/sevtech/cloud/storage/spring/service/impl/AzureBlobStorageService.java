@@ -13,6 +13,7 @@ import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +25,13 @@ import java.io.InputStream;
 import java.util.concurrent.Future;
 
 @Slf4j
+@RequiredArgsConstructor
 public class AzureBlobStorageService extends AbstractStorageService implements StorageService {
 
     @Value("${azure.blob.storage.container.name}")
     private String defaultContainerName;
 
     private final BlobServiceClient blobServiceClient;
-
-    public AzureBlobStorageService(BlobServiceClient blobServiceClient) {
-        this.blobServiceClient = blobServiceClient;
-    }
 
     @Override
     public UploadFileResponse uploadFile(UploadFileRequest uploadFileRequest) {

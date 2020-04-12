@@ -1,7 +1,9 @@
 package com.github.sevtech.cloud.storage.spring.property;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 
+@RequiredArgsConstructor
 public class AwsS3Properties {
 	
 	private static final String S3_ACCESS_KEY = "aws.s3.accessKey";
@@ -12,11 +14,7 @@ public class AwsS3Properties {
 	private static final String LOCALSTACK_ENDPOINT = "localstack.endpoint";
 	private static final String LOCALSTACK_REGION = "localstack.region";
 
-	private Environment env;
-
-	public AwsS3Properties(Environment env) {
-		this.env = env;
-	}
+	private final Environment env;
 
 	public String getS3AccessKey() {
 		return env.getProperty(S3_ACCESS_KEY);
