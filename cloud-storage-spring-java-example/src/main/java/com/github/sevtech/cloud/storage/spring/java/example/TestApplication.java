@@ -32,54 +32,21 @@ public class TestApplication {
     }
 
     @Autowired
-    private StorageService dropboxService;
+    private StorageService storageService;
 
-    /* AWS */
-
-//    @PostMapping("/aws/files")
-//    public UploadFileResponse uploadFileAws(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-//        return awsS3Service.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-//    }
-//
-//    /* Google Cloud */
-//
-//    @PostMapping("/gcp/files")
-//    public UploadFileResponse uploadFileGcp(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-//        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-//    }
-
-    /* Azure*/
-
-//    @PostMapping("/azure/files")
-//    public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
-//        return azureBlobStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-//    }
-//
-//    @GetMapping("/azure/files")
-//    public byte[] getFileAzure(@RequestParam String name) throws IOException {
-//        return azureBlobStorageService.getFile(GetFileRequest.builder().path(name).build()).getContent();
-//    }
-//
-//    @DeleteMapping("/azure/files")
-//    public int deleteFileAzure(@RequestParam String name) throws IOException {
-//        return azureBlobStorageService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
-//    }
-
-    /* Dropbox */
-
-    @PostMapping("/dropbox/files")
+    @PostMapping("/files")
     public UploadFileResponse uploadFileDropbox(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
-        return dropboxService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+        return storageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
     }
 
-    @GetMapping("/dropbox/files")
+    @GetMapping("/files")
     public byte[] getFileDropbox(@RequestParam String name) {
-        return dropboxService.getFile(GetFileRequest.builder().path(name).build()).getContent();
+        return storageService.getFile(GetFileRequest.builder().path(name).build()).getContent();
     }
 
-    @DeleteMapping("/dropbox/files")
+    @DeleteMapping("/files")
     public int deleteFileDropbox(@RequestParam String name) {
-        return dropboxService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
+        return storageService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
     }
 
 }

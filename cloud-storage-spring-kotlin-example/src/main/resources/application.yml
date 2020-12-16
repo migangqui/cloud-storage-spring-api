@@ -1,5 +1,11 @@
 server:
   port: 9090
+
+dropbox:
+  enabled: true
+  accessToken: "accessToken"
+  clientIdentifier: "clientIdentifier"
+
 gcp:
   storage:
     enabled: false
@@ -21,6 +27,7 @@ azure:
       connectionString: "your-connection-string"
       container:
         name: prueba1
+
 localstack:
   enabled: false
   endpoint: http://localhost:4572
