@@ -6,8 +6,8 @@ This is a Kotlin API to manage files of AmazonS3 in Spring.
 
 ```xml
 <dependency>
-	<groupId>com.migangqui</groupId>
-	<artifactId>spring-aws-s3-kotlin</artifactId>
+	<groupId>com.github.sevtech-dev</groupId>
+	<artifactId>cloud-storage-spring-kotlin</artifactId>
 	<version>${currentVersion}</version>
 </dependency>
 ```

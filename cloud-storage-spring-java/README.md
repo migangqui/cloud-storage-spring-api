@@ -6,8 +6,8 @@ This is a Java API to manage files of AmazonS3 in Spring.
 
 ```xml
 <dependency>
-	<groupId>com.migangqui</groupId>
-	<artifactId>spring-aws-s3-java</artifactId>
+	<groupId>com.github.sevtech-dev</groupId>
+	<artifactId>cloud-storage-spring-java</artifactId>
 	<version>${currentVersion}</version>
 </dependency>
 ```
