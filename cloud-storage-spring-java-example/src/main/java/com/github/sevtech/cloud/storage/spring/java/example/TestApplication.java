@@ -73,12 +73,12 @@ public class TestApplication {
     }
 
     @GetMapping("/dropbox/files")
-    public byte[] getFileDropbox(@RequestParam String name) throws IOException {
+    public byte[] getFileDropbox(@RequestParam String name) {
         return dropboxService.getFile(GetFileRequest.builder().path(name).build()).getContent();
     }
 
     @DeleteMapping("/dropbox/files")
-    public int deleteFileDropbox(@RequestParam String name) throws IOException {
+    public int deleteFileDropbox(@RequestParam String name) {
         return dropboxService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
     }
 

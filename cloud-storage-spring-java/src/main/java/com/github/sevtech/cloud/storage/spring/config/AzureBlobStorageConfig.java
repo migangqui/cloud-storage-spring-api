@@ -16,19 +16,18 @@ import org.springframework.core.env.Environment;
 public class AzureBlobStorageConfig {
 
     @Bean
-    public AzureBlobStorageProperties azureBlobStorageProperties(Environment env) {
+    public AzureBlobStorageProperties azureBlobStorageProperties(final Environment env) {
         return new AzureBlobStorageProperties(env);
     }
 
     @Bean
-    public BlobServiceClient blobServiceClient(AzureBlobStorageProperties azureBlobStorageProperties) {
+    public BlobServiceClient blobServiceClient(final AzureBlobStorageProperties azureBlobStorageProperties) {
         log.info("Registering Azure Blob Storage client");
-
         return new BlobServiceClientBuilder().connectionString(azureBlobStorageProperties.getConnectionString()).buildClient();
     }
 
     @Bean
-    public StorageService azureBlobStorageService(BlobServiceClient blobServiceClient) {
+    public StorageService azureBlobStorageService(final BlobServiceClient blobServiceClient) {
         return new AzureBlobStorageService(blobServiceClient);
     }
 

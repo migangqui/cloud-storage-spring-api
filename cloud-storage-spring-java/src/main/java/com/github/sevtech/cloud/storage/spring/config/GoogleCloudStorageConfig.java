@@ -19,12 +19,12 @@ import java.io.IOException;
 @ConditionalOnCloudStorageProperty(value = "gcp.storage.enabled")
 public class GoogleCloudStorageConfig {
     @Bean
-    public GoogleCloudStorageProperties googleCloudStorageProperties(Environment env) {
+    public GoogleCloudStorageProperties googleCloudStorageProperties(final Environment env) {
         return new GoogleCloudStorageProperties(env);
     }
 
     @Bean
-    public Storage storageClient(GoogleCloudStorageProperties googleCloudStorageProperties) throws IOException {
+    public Storage storageClient(final GoogleCloudStorageProperties googleCloudStorageProperties) throws IOException {
         log.info("Registering Google Storage client");
         return StorageOptions.newBuilder()
                 .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(googleCloudStorageProperties.getKeyFileLocation())))
@@ -33,7 +33,7 @@ public class GoogleCloudStorageConfig {
     }
 
     @Bean
-    public StorageService googleCloudStorageService(Storage storageClient) {
+    public StorageService googleCloudStorageService(final Storage storageClient) {
         return new GoogleCloudStorageService(storageClient);
     }
 

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 
 import java.io.ByteArrayOutputStream;
@@ -34,7 +35,7 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
     private final BlobServiceClient blobServiceClient;
 
     @Override
-    public UploadFileResponse uploadFile(UploadFileRequest uploadFileRequest) {
+    public UploadFileResponse uploadFile(final UploadFileRequest uploadFileRequest) {
         UploadFileResponse result;
 
         try {
@@ -56,13 +57,14 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
         return result;
     }
 
+    @Async
     @Override
-    public Future<UploadFileResponse> uploadFileAsync(UploadFileRequest request) {
+    public Future<UploadFileResponse> uploadFileAsync(final UploadFileRequest request) {
         return new AsyncResult<>(uploadFile(request));
     }
 
     @Override
-    public GetFileResponse getFile(GetFileRequest request) {
+    public GetFileResponse getFile(final GetFileRequest request) {
         log.info("Reading file from Azure {}", request.getPath());
         GetFileResponse result;
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -77,7 +79,7 @@ public class AzureBlobStorageService extends AbstractStorageService implements S
     }
 
     @Override
-    public DeleteFileResponse deleteFile(DeleteFileRequest request) {
+    public DeleteFileResponse deleteFile(final DeleteFileRequest request) {
         log.info("Deleting file from Azure {}", request.getPath());
         DeleteFileResponse result;
         try {

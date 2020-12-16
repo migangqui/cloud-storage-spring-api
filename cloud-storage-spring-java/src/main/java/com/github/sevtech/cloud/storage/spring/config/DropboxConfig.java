@@ -16,12 +16,13 @@ import org.springframework.core.env.Environment;
 public class DropboxConfig {
 
     @Bean
-    public DropboxProperties dropboxProperties(Environment env) {
+    public DropboxProperties dropboxProperties(final Environment env) {
         return new DropboxProperties(env);
     }
 
     @Bean
-    public DbxClientV2 dbxClientV2(DropboxProperties dropboxProperties) {
+    public DbxClientV2 dbxClientV2(final DropboxProperties dropboxProperties) {
+        log.info("Registering DbxClientV2");
         return new DbxClientV2(DbxRequestConfig.newBuilder(
                 dropboxProperties.getClientIdentifier()).build(), dropboxProperties.getDropboxAccessToken());
     }

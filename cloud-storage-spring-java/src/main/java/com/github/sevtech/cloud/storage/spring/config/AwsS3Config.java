@@ -25,7 +25,7 @@ public class AwsS3Config {
     }
 
     @Bean
-    public AmazonS3 awsS3Client(AwsS3Properties awsS3Properties) {
+    public AmazonS3 awsS3Client(final AwsS3Properties awsS3Properties) {
         AmazonS3 client;
 
         if (awsS3Properties.isLocalstackEnabled()) {
@@ -46,7 +46,7 @@ public class AwsS3Config {
     }
 
     @Bean
-    public StorageService awsS3Service(AmazonS3 awsS3Client) {
+    public StorageService awsS3Service(final AmazonS3 awsS3Client) {
         return new AwsS3Service(awsS3Client);
     }
 

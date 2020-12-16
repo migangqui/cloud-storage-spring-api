@@ -33,7 +33,7 @@ public class GoogleCloudStorageService extends AbstractStorageService implements
     private final Storage storageClient;
 
     @Override
-    public UploadFileResponse uploadFile(UploadFileRequest uploadFileRequest) {
+    public UploadFileResponse uploadFile(final UploadFileRequest uploadFileRequest) {
         UploadFileResponse result;
 
         try {
@@ -53,12 +53,12 @@ public class GoogleCloudStorageService extends AbstractStorageService implements
 
     @Async
     @Override
-    public Future<UploadFileResponse> uploadFileAsync(UploadFileRequest uploadFileRequest) {
+    public Future<UploadFileResponse> uploadFileAsync(final UploadFileRequest uploadFileRequest) {
         return new AsyncResult<>(uploadFile(uploadFileRequest));
     }
 
     @Override
-    public GetFileResponse getFile(GetFileRequest request) {
+    public GetFileResponse getFile(final GetFileRequest request) {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try {

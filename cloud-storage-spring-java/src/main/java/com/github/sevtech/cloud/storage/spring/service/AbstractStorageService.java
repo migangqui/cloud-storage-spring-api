@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public abstract class AbstractStorageService {
 
-    protected InputStream clone(final java.io.InputStream inputStream) {
+    protected InputStream clone(final InputStream inputStream) {
         InputStream result = null;
         try {
             inputStream.mark(0);
@@ -29,13 +29,13 @@ public abstract class AbstractStorageService {
         return result;
     }
 
-    protected String getBucketName(String bucketName, String defaultBucketName) throws NoBucketException {
+    protected String getBucketName(final String bucketName, final String defaultBucketName) throws NoBucketException {
         return Optional.ofNullable(
                 Optional.ofNullable(bucketName).orElse(defaultBucketName))
                 .orElseThrow(() -> new NoBucketException("Bucket name not indicated"));
     }
 
-    protected String getFilePath(UploadFileRequest request) {
+    protected String getFilePath(final UploadFileRequest request) {
         return request.getFolder().concat("/").concat(request.getName());
     }
 
