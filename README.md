@@ -44,13 +44,13 @@ To enable the concrete configuration, you must set the following properties:
 To AWS S3:
 ```yaml
 aws:
-    s3:
-      enabled: true
-      accessKey: [AMAZON_ACCESS_KEY]
-      secretKey: [AMAZON_SECRET_KEY]
-      bucket:
-        name: yourbucketname
-      region: [GovCloud("us-gov-west-1"),
+  s3:
+    enabled: true
+    accessKey: [AMAZON_ACCESS_KEY]
+    secretKey: [AMAZON_SECRET_KEY]
+    bucket:
+      name: yourbucketname
+    region: [GovCloud("us-gov-west-1"),
              US_EAST_1("us-east-1"),
              US_WEST_1("us-west-1"),
              US_WEST_2("us-west-2"),
@@ -66,6 +66,10 @@ aws:
 ```
 ** Only one and only the string of the region.
 
+* **accessKey/secretKey**: the keys to connect to AWS. To get it, check out <a href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html" target="_blank">this information</a>.
+* **bucket.name**: the bucket name.
+* **region**: AWS region where your bucket is located.
+
 To Google Cloud Storage:
 ```yaml
 gcp:
@@ -75,6 +79,8 @@ gcp:
       name: yourbucketname
     keyfile: "where-you-keyfile"
 ```
+* **bucket.name**: the bucket name.
+* **keyfile**: the file to authenticate. To generate it, check out <a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#iam-service-account-keys-create-gcloud" target="_blank">this information</a>.
 
 To Azure Blob Storage:
 ```yaml
@@ -84,8 +90,10 @@ azure:
       enabled: true
       connectionString: "your-connection-string"
       container:
-        name: yourbucketname
+        name: containername
 ```
+* **connectionString**: to get it, check out <a href="https://docs.microsoft.com/es-es/azure/storage/common/storage-account-keys-manage?tabs=azure-portal" target="_blank">this information</a>.
+* **conainer.name**: name of your files container.
 
 To Dropbox:
 ```yaml
@@ -94,6 +102,8 @@ dropbox:
   accessToken: "accessToken"
   clientIdentifier: "clientIdentifier"
 ```
+* **accessToken**: to get it, check out <a href="http://99rabbits.com/get-dropbox-access-token/" target="_blank">this information</a>.
+* **clientIdentifier**: name of your app.
 
 ## Enable async
 
@@ -104,10 +114,10 @@ Add ```@EnableAsync``` annotation in your Spring Application class to enable asy
 To controle max size of files you can upload, set the following properties:
 ```yaml
 spring:
-    servlet:
-        multipart:
-            max-file-size: 128KB
-            max-request-size: 128KB
+  servlet:
+    multipart:
+      max-file-size: 128KB
+      max-request-size: 128KB
 ```
 
 ## How to use
@@ -206,10 +216,12 @@ This library can be tested with Localstack (<https://github.com/localstack/local
 You only have to set the following properties in your application.yml:
 
 ```yaml
-localstack:
-  enabled: false (by default)
-  endpoint: http://localhost:4572
-  region: us-east-1
+aws:
+  s3:
+    localstack:
+      enabled: false (by default)
+      endpoint: http://localhost:4572
+      region: us-east-1
 ```
 
 In order to run easily Localstack, I have added ```docker-compose.yml``` file to the folder ```localstack```. 
