@@ -1,3 +1,10 @@
 package com.github.sevtech.cloud.storage.spring.bean
 
-class DeleteFileResponse(val result: Boolean = false, val status: Int, cause: String? = null, val exception: Exception? = null)
+import com.fasterxml.jackson.annotation.JsonInclude
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+data class DeleteFileResponse(var result: Boolean = false,
+                              var status: Int = 0,
+                              var cause: String? = null,
+                              var exception: Exception? = null
+) : BaseResponse(status, cause, exception)
