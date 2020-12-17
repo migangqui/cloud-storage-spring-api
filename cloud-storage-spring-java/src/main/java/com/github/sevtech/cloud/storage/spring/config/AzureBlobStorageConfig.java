@@ -8,7 +8,6 @@ import com.github.sevtech.cloud.storage.spring.service.impl.AzureBlobStorageServ
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 @Slf4j
 @Configuration
@@ -16,8 +15,8 @@ import org.springframework.core.env.Environment;
 public class AzureBlobStorageConfig {
 
     @Bean
-    public AzureBlobStorageProperties azureBlobStorageProperties(final Environment env) {
-        return new AzureBlobStorageProperties(env);
+    public AzureBlobStorageProperties azureBlobStorageProperties() {
+        return new AzureBlobStorageProperties();
     }
 
     @Bean

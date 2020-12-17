@@ -8,7 +8,6 @@ import com.github.sevtech.cloud.storage.spring.service.impl.DropboxService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 @Slf4j
 @Configuration
@@ -16,15 +15,15 @@ import org.springframework.core.env.Environment;
 public class DropboxConfig {
 
     @Bean
-    public DropboxProperties dropboxProperties(final Environment env) {
-        return new DropboxProperties(env);
+    public DropboxProperties dropboxProperties() {
+        return new DropboxProperties();
     }
 
     @Bean
     public DbxClientV2 dbxClientV2(final DropboxProperties dropboxProperties) {
         log.info("Registering DbxClientV2");
         return new DbxClientV2(DbxRequestConfig.newBuilder(
-                dropboxProperties.getClientIdentifier()).build(), dropboxProperties.getDropboxAccessToken());
+                dropboxProperties.getClientIdentifier()).build(), dropboxProperties.getAccessToken());
     }
 
     @Bean

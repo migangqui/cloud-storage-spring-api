@@ -2,7 +2,7 @@ server:
   port: 9090
 
 dropbox:
-  enabled: true
+  enabled: false
   accessToken: "accessToken"
   clientIdentifier: "clientIdentifier"
 
@@ -18,13 +18,14 @@ aws:
     enabled: false
     accessKey: "your-access-key"
     secretKey: "your-secret-key"
-    bucket.name: mytestbucket
-  region: us-east-1
+    bucket:
+      name: mytestbucket
+    region: us-east-1
 
 azure:
   blob:
     storage:
-      enabled: false
+      enabled: true
       connectionString: "your-connection-string"
       container:
         name: prueba1

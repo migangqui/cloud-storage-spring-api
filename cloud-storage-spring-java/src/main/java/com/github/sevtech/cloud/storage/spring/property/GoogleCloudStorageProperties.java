@@ -1,16 +1,14 @@
 package com.github.sevtech.cloud.storage.spring.property;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@RequiredArgsConstructor
+@Getter
+@Setter
+@ConfigurationProperties(prefix = "gcp.storage")
 public class GoogleCloudStorageProperties {
 
-	private static final String KEYFILE_LOCATION = "gcp.storage.keyfile";
+	private String keyfile;
 
-	private final Environment env;
-
-	public String getKeyFileLocation() {
-		return env.getProperty(KEYFILE_LOCATION);
-	}
 }
