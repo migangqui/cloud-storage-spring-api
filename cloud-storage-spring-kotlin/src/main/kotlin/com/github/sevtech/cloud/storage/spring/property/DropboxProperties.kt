@@ -1,14 +1,9 @@
 package com.github.sevtech.cloud.storage.spring.property
 
-import org.springframework.core.env.Environment
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-class DropboxProperties(private val env: Environment) {
-    private val ACCESS_TOKEN = "dropbox.accessToken"
-    private val CLIENT_IDENTIFIER = "dropbox.clientIdentifier"
-
-    val dropboxAccessToken: String?
-        get() = env.getProperty(ACCESS_TOKEN)
-
-    val clientIdentifier: String?
-        get() = env.getProperty(CLIENT_IDENTIFIER)
+@ConfigurationProperties(prefix = "dropbox")
+class DropboxProperties {
+    var accessToken: String? = null
+    var clientIdentifier: String? = null
 }

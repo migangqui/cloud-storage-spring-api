@@ -1,10 +1,8 @@
 package com.github.sevtech.cloud.storage.spring.property;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.core.env.Environment;
 
 @Getter
 @Setter

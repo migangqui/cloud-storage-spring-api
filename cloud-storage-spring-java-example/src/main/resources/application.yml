@@ -21,6 +21,10 @@ aws:
     bucket:
       name: mytestbucket
     region: us-east-1
+    localstack:
+      enabled: false
+      endpoint: http://localhost:4572
+      region: us-east-1
 
 azure:
   blob:
@@ -29,8 +33,3 @@ azure:
       connectionString: "your-connection-string"
       container:
         name: prueba1
-
-localstack:
-  enabled: false
-  endpoint: http://localhost:4572
-  region: us-east-1

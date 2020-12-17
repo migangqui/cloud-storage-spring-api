@@ -11,7 +11,6 @@ import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service
 import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
 
 @Configuration
 @ConditionalOnCloudStorageProperty(value = "aws.s3.enabled")
@@ -20,13 +19,13 @@ class AwsS3Config() {
     private val log = KotlinLogging.logger {}
 
     @Bean
-    fun awsS3Properties(env: Environment): AwsS3Properties {
-        return AwsS3Properties(env)
+    fun awsS3Properties(): AwsS3Properties {
+        return AwsS3Properties()
     }
 
     @Bean
     fun awsS3Client(awsS3Properties: AwsS3Properties): AmazonS3? {
-        return if (awsS3Properties.isLocalstackEnabled) {
+        return if (awsS3Properties.localstackEnabled) {
             log.info("Registering AmazonS3Client (with Localstack)")
             AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(
@@ -44,8 +43,8 @@ class AwsS3Config() {
                 .withCredentials(
                     AWSStaticCredentialsProvider(
                         BasicAWSCredentials(
-                            awsS3Properties.s3AccessKey,
-                            awsS3Properties.s3SecretKey
+                            awsS3Properties.accessKey,
+                            awsS3Properties.secretKey
                         )
                     )
                 )

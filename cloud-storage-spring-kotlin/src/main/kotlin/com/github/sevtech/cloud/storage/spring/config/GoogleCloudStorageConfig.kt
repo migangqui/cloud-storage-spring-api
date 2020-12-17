@@ -9,7 +9,6 @@ import com.google.cloud.storage.StorageOptions
 import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
 import java.io.FileInputStream
 import java.io.IOException
 
@@ -20,8 +19,8 @@ class GoogleCloudStorageConfig {
     private val log = KotlinLogging.logger {}
 
     @Bean
-    fun googleCloudStorageProperties(env: Environment): GoogleCloudStorageProperties? {
-        return GoogleCloudStorageProperties(env)
+    fun googleCloudStorageProperties(): GoogleCloudStorageProperties? {
+        return GoogleCloudStorageProperties()
     }
 
     @Bean
@@ -29,7 +28,7 @@ class GoogleCloudStorageConfig {
     fun storageClient(googleCloudStorageProperties: GoogleCloudStorageProperties): Storage? {
         log.info("Registering Google Storage client")
         return StorageOptions.newBuilder()
-            .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream(googleCloudStorageProperties.keyfileLocation)))
+            .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream(googleCloudStorageProperties.keyfile!!)))
             .build()
             .service
     }

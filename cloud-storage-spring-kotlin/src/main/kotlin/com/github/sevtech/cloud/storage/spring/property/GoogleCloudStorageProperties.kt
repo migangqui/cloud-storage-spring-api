@@ -1,12 +1,8 @@
 package com.github.sevtech.cloud.storage.spring.property
 
-import org.springframework.core.env.Environment
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-class GoogleCloudStorageProperties(private val env: Environment) {
-
-    private val KEYFILE_LOCATION = "gcp.storage.keyfile"
-
-    val keyfileLocation: String?
-        get() = env.getProperty(KEYFILE_LOCATION)
-
+@ConfigurationProperties(prefix = "gcp.storage")
+class GoogleCloudStorageProperties {
+    var keyfile: String? = null
 }

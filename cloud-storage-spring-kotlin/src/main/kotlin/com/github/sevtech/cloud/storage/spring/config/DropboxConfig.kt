@@ -8,7 +8,6 @@ import com.github.sevtech.cloud.storage.spring.service.impl.DropboxService
 import mu.KotlinLogging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
 
 @Configuration
 @ConditionalOnCloudStorageProperty(value = "dropbox.enabled")
@@ -17,15 +16,15 @@ class DropboxConfig() {
     private val log = KotlinLogging.logger {}
 
     @Bean
-    fun dropboxProperties(env: Environment): DropboxProperties {
-        return DropboxProperties(env)
+    fun dropboxProperties(): DropboxProperties {
+        return DropboxProperties()
     }
 
     @Bean
     fun dbxClientV2(dropboxProperties: DropboxProperties): DbxClientV2? {
         log.info("Registering DbxClientV2")
         return DbxClientV2(DbxRequestConfig.newBuilder(
-                dropboxProperties.clientIdentifier).build(), dropboxProperties.dropboxAccessToken)
+                dropboxProperties.clientIdentifier).build(), dropboxProperties.accessToken)
     }
 
     @Bean
