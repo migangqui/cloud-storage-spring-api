@@ -15,7 +15,7 @@
     <packaging>jar</packaging>
 
     <name>cloud-storage-spring-java</name>
-    <description>Spring Cloud Storage Java API to AWS, GCloud and Azure</description>
+    <description>Spring Cloud Storage Java API to AWS, GCloud, Azure and Dropbox</description>
 
     <url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
     <developers>

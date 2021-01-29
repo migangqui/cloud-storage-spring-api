@@ -19,5 +19,6 @@ public class UploadFileRequest {
     @NonNull
     private String contentType;
     private String bucketName;
+    @Builder.Default
     private CannedAccessControlList accessControl = CannedAccessControlList.Private;
 }

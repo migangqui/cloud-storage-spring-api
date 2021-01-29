@@ -14,7 +14,7 @@
 	<packaging>jar</packaging>
 
 	<name>cloud-storage-spring-kotlin</name>
-	<description>Spring Cloud Storage Kotlin API to AWS, GCloud and Azure</description>
+	<description>Spring Cloud Storage Kotlin API to AWS, GCloud, Azure and Dropbox</description>
 
 	<url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
 	<developers>

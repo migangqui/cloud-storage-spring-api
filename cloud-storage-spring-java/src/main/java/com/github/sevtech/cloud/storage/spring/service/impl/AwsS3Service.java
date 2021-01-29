@@ -49,7 +49,7 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
             final ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(IOUtils.toByteArray(request.getStream()).length);
 
-            if (!StringUtils.isEmpty(request.getContentType())) {
+            if (StringUtils.hasText(request.getContentType())) {
                 metadata.setContentType(request.getContentType());
                 metadata.setCacheControl("s-maxage");
             }
