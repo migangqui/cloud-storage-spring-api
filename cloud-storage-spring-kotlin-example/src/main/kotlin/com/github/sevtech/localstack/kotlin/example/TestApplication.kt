@@ -29,19 +29,19 @@ class MediaController(private val storageService: StorageService) {
 
     @PostMapping("/files")
     @Throws(IOException::class)
-    fun uploadFileAzure(@RequestBody file: MultipartFile, @RequestParam name: String, @RequestParam folder: String): UploadFileResponse {
+    fun uploadFile(@RequestBody file: MultipartFile, @RequestParam name: String, @RequestParam folder: String): UploadFileResponse {
         return storageService.uploadFile(UploadFileRequest(stream = ByteArrayInputStream(file.bytes), folder = folder, name = name, contentType = file.contentType!!))
     }
 
     @GetMapping("/files")
     @Throws(IOException::class)
-    fun getFileAzure(@RequestParam name: String): ByteArray? {
+    fun getFile(@RequestParam name: String): ByteArray? {
         return storageService.getFile(GetFileRequest(path = name)).content
     }
 
     @DeleteMapping("/files")
     @Throws(IOException::class)
-    fun deleteFileAzure(@RequestParam name: String): Int {
+    fun deleteFile(@RequestParam name: String): Int {
         return storageService.deleteFile(DeleteFileRequest(path = name)).status
     }
 

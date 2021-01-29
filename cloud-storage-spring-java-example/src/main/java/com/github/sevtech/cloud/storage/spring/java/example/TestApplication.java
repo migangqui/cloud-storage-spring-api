@@ -35,17 +35,17 @@ public class TestApplication {
     private StorageService storageService;
 
     @PostMapping("/files")
-    public UploadFileResponse uploadFileDropbox(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
+    public UploadFileResponse uploadFile(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
         return storageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
     }
 
     @GetMapping("/files")
-    public byte[] getFileDropbox(@RequestParam String name) {
+    public byte[] getFile(@RequestParam String name) {
         return storageService.getFile(GetFileRequest.builder().path(name).build()).getContent();
     }
 
     @DeleteMapping("/files")
-    public int deleteFileDropbox(@RequestParam String name) {
+    public int deleteFile(@RequestParam String name) {
         return storageService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
     }
 
