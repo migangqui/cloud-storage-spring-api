@@ -5,7 +5,6 @@ import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest
 import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse
 import com.github.sevtech.cloud.storage.spring.service.StorageService
-import com.github.sevtech.cloud.storage.spring.service.impl.DropboxService
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.scheduling.annotation.EnableAsync
