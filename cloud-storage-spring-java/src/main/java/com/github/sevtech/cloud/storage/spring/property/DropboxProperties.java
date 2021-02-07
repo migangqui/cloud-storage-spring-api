@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "azure.blob.storage")
-public class AzureBlobStorageProperties {
+@ConfigurationProperties(prefix = "dropbox")
+public class DropboxProperties {
 
-    private String connectionString;
-    private String containerName;
+    private String accessToken;
+    private String clientIdentifier;
 
 }

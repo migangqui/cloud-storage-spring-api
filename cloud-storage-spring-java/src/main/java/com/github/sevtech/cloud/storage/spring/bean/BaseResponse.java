@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class DeleteFileResponse extends BaseResponse {
-	private boolean result;
+public class BaseResponse {
+    private int status;
+    private String cause;
+    private Exception exception;
 }

@@ -18,6 +18,7 @@ import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,19 +31,16 @@ import java.io.InputStream;
 import java.util.concurrent.Future;
 
 @Slf4j
+@RequiredArgsConstructor
 public class AwsS3Service extends AbstractStorageService implements StorageService {
 
     @Value("${aws.s3.bucket.name}")
     private String defaultBucketName;
 
-    private AmazonS3 awsS3Client;
-
-    public AwsS3Service(AmazonS3 awsS3Client) {
-        this.awsS3Client = awsS3Client;
-    }
+    private final AmazonS3 awsS3Client;
 
     @Override
-    public UploadFileResponse uploadFile(UploadFileRequest request) {
+    public UploadFileResponse uploadFile(final UploadFileRequest request) {
         UploadFileResponse result;
 
         try {
@@ -51,7 +49,7 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
             final ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(IOUtils.toByteArray(request.getStream()).length);
 
-            if (!StringUtils.isEmpty(request.getContentType())) {
+            if (StringUtils.hasText(request.getContentType())) {
                 metadata.setContentType(request.getContentType());
                 metadata.setCacheControl("s-maxage");
             }
@@ -82,12 +80,12 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
 
     @Async
     @Override
-    public Future<UploadFileResponse> uploadFileAsync(UploadFileRequest request) {
+    public Future<UploadFileResponse> uploadFileAsync(final UploadFileRequest request) {
         return new AsyncResult<>(uploadFile(request));
     }
 
     @Override
-    public GetFileResponse getFile(GetFileRequest request) {
+    public GetFileResponse getFile(final GetFileRequest request) {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try (S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()))) {
@@ -101,7 +99,7 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
     }
 
     @Override
-    public DeleteFileResponse deleteFile(DeleteFileRequest request) {
+    public DeleteFileResponse deleteFile(final DeleteFileRequest request) {
         log.info("Deleting file from path {}", request.getPath());
         DeleteFileResponse result;
         try {
@@ -123,7 +121,7 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
 
     /* Private methods */
 
-    private void showAmazonServiceExceptionUploadFileLogs(AmazonServiceException ase) {
+    private void showAmazonServiceExceptionUploadFileLogs(final AmazonServiceException ase) {
         log.error("Caught an AmazonServiceException, which means your request made it "
                 + "to Amazon S3, but was rejected with an error response for some reason.");
         log.error("Error Message:    {}", ase.getMessage());
@@ -133,7 +131,7 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
         log.error("Request ID:       {}", ase.getRequestId());
     }
 
-    private void showAmazonClientExceptionUploadFileLogs(AmazonClientException ace) {
+    private void showAmazonClientExceptionUploadFileLogs(final AmazonClientException ace) {
         log.error("Caught an AmazonClientException, which means the client encountered "
                 + "an internal error while trying to communicate with S3, such as not being able to access the network.");
         log.error("Error Message: " + ace.getMessage());

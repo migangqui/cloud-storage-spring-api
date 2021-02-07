@@ -31,41 +31,22 @@ public class TestApplication {
         SpringApplication.run(TestApplication.class, args);
     }
 
-//    @Autowired
-//    private StorageService awsS3Service;
-//    @Autowired
-//    private StorageService googleCloudStorageService;
     @Autowired
-    private StorageService azureBlobStorageService;
+    private StorageService storageService;
 
-    /* AWS */
-
-//    @PostMapping("/aws/files")
-//    public UploadFileResponse uploadFileAws(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-//        return awsS3Service.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-//    }
-//
-//    /* Google Cloud */
-//
-//    @PostMapping("/gcp/files")
-//    public UploadFileResponse uploadFileGcp(@RequestBody MultipartFile file, @RequestParam String folder, @RequestParam String name) throws IOException {
-//        return googleCloudStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
-//    }
-
-    /* Azure*/
-
-    @PostMapping("/azure/files")
-    public UploadFileResponse uploadFileAzure(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
-        return azureBlobStorageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
+    @PostMapping("/files")
+    public UploadFileResponse uploadFile(@RequestBody MultipartFile file, @RequestParam String name, @RequestParam String folder) throws IOException {
+        return storageService.uploadFile(UploadFileRequest.builder().stream(new ByteArrayInputStream(file.getBytes())).folder(folder).name(name).contentType(file.getContentType()).build());
     }
 
-    @GetMapping("/azure/files")
-    public byte[] getFileAzure(@RequestParam String name) throws IOException {
-        return azureBlobStorageService.getFile(GetFileRequest.builder().path(name).build()).getContent();
+    @GetMapping("/files")
+    public byte[] getFile(@RequestParam String name) {
+        return storageService.getFile(GetFileRequest.builder().path(name).build()).getContent();
     }
 
-    @DeleteMapping("/azure/files")
-    public int deleteFileAzure(@RequestParam String name) throws IOException {
-        return azureBlobStorageService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
+    @DeleteMapping("/files")
+    public int deleteFile(@RequestParam String name) {
+        return storageService.deleteFile(DeleteFileRequest.builder().path(name).build()).getStatus();
     }
+
 }

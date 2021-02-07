@@ -1,6 +1,6 @@
 # Spring AWS S3 Kotlin API
 
-This is a Kotlin API to manage files of AmazonS3 in Spring. 
+This is a Kotlin API to manage files of cloud providers in Spring. 
 
 ### Add dependency to pom.xml:
 
@@ -12,4 +12,4 @@ This is a Kotlin API to manage files of AmazonS3 in Spring.
 </dependency>
 ```
 
-```${currentVersion}``` right now is ```1.0.0```
+```${currentVersion}``` right now is ```1.1.0```

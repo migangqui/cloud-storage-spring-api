@@ -38,7 +38,7 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
             val metadata = ObjectMetadata()
             metadata.contentLength = IOUtils.toByteArray(request.stream).size.toLong()
 
-            if (!StringUtils.isEmpty(request.contentType)) {
+            if (StringUtils.hasText(request.contentType)) {
                 metadata.contentType = request.contentType
                 metadata.cacheControl = "s-maxage"
             }

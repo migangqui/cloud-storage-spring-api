@@ -10,7 +10,6 @@ import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import static com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 
@@ -20,15 +19,15 @@ import static com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguratio
 public class AwsS3Config {
 
     @Bean
-    public AwsS3Properties awsS3Properties(Environment env) {
-        return new AwsS3Properties(env);
+    public AwsS3Properties awsS3Properties() {
+        return new AwsS3Properties();
     }
 
     @Bean
-    public AmazonS3 awsS3Client(AwsS3Properties awsS3Properties) {
+    public AmazonS3 awsS3Client(final AwsS3Properties awsS3Properties) {
         AmazonS3 client;
 
-        if (awsS3Properties.isLocalstackEnabled()) {
+        if (awsS3Properties.getLocalstackEnabled()) {
             log.info("Registering AmazonS3Client (with Localstack)");
             client = AmazonS3ClientBuilder.standard()
                     .withEndpointConfiguration(new EndpointConfiguration(awsS3Properties.getLocalstackEndpoint(), awsS3Properties.getLocalstackRegion()))
@@ -38,7 +37,7 @@ public class AwsS3Config {
             log.info("Registering AmazonS3Client");
             client = AmazonS3ClientBuilder
                     .standard()
-                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsS3Properties.getS3AccessKey(), awsS3Properties.getS3SecretKey())))
+                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsS3Properties.getAccessKey(), awsS3Properties.getSecretKey())))
                     .withRegion(awsS3Properties.getRegion())
                     .build();
         }
@@ -46,7 +45,7 @@ public class AwsS3Config {
     }
 
     @Bean
-    public StorageService awsS3Service(AmazonS3 awsS3Client) {
+    public StorageService awsS3Service(final AmazonS3 awsS3Client) {
         return new AwsS3Service(awsS3Client);
     }
 

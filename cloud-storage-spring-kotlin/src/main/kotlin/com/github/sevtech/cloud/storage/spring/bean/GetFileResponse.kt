@@ -1,3 +1,11 @@
 package com.github.sevtech.cloud.storage.spring.bean
 
-class GetFileResponse(val content:ByteArray? = null, val status: Int, cause: String? = null, val exception: Exception? = null)
+import com.fasterxml.jackson.annotation.JsonInclude
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+data class GetFileResponse(
+        var content: ByteArray? = null,
+        var status: Int = 0,
+        var cause: String? = null,
+        var exception: Exception? = null
+) : BaseResponse(status, cause, exception)

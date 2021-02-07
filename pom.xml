@@ -6,15 +6,16 @@
 
     <groupId>com.github.sevtech-dev</groupId>
     <artifactId>cloud-storage-spring</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <name>cloud-storage-spring</name>
-    <description>Spring Cloud Storage Java and Kotlin API to AWS, GCloud and Azure</description>
+    <description>Spring Cloud Storage Java and Kotlin API to AWS, GCloud, Azure and Dropbox</description>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <modules>
@@ -23,29 +24,35 @@
     </modules>
 
     <dependencies>
-        <!-- Spring -->
+        <!-- Spring Boot -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>5.2.1.RELEASE</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>2.4.1</version>
         </dependency>
         <!-- AWS -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.683</version>
+            <version>1.11.944</version>
         </dependency>
         <!-- GCloud -->
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
-            <version>1.61.0</version>
+            <version>1.113.9</version>
         </dependency>
         <!-- Azure -->
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
-            <version>12.1.0</version>
+            <version>12.10.0</version>
+        </dependency>
+        <!-- Dropbox -->
+        <dependency>
+            <groupId>com.dropbox.core</groupId>
+            <artifactId>dropbox-core-sdk</artifactId>
+            <version>3.1.5</version>
         </dependency>
     </dependencies>
 

@@ -1,10 +1,15 @@
 # Cloud Storage Spring (Java/Kotlin)
 
-<img src="https://d1ngwfo98ojxvt.cloudfront.net/images/blog/aws/s3_getting_started/AmazonS3.png" width="25%">
-<img src="https://developers.gigya.com/download/attachments/45809882/1200px-Google-Cloud-Storage-Logo.png?version=1&modificationDate=1574102537000&api=v2" width="20%">
-<img src="https://dellenny.com/wp-content/uploads/2019/04/azure-storage-blob.png" width="25%">
+Here we are a Java and a Kotlin API to manage files of AWS S3, Google Cloud Storage, Azure Blob Storage and Dropbox in Spring framework.
 
-Here we are a Java and a Kotlin API to manage files of AWS S3, Google Cloud Storage and Azure Blob Storage in Spring framework.
+<h4>AWS S3</h4>
+<img src="https://d1ngwfo98ojxvt.cloudfront.net/images/blog/aws/s3_getting_started/AmazonS3.png" width="13%">
+<h4>Google Cloud Storage</h4>
+<img src="https://developers.gigya.com/download/attachments/45809882/1200px-Google-Cloud-Storage-Logo.png?version=1&modificationDate=1574102537000&api=v2" width="10%">
+<h4>Azure Store Blob</h4>
+<img src="https://dellenny.com/wp-content/uploads/2019/04/azure-storage-blob.png" width="13%">
+<h4>Dropbox</h4>
+<img src="https://cfl.dropboxstatic.com/static/images/logo_catalog/twitter-card-glyph_m1%402x.png" width="10%">
 
 In order to use it, are necessaries the following steps:
 
@@ -30,7 +35,7 @@ If you use Kotlin:
 </dependency>
 ```
 
-```${currentVersion}``` right now is ```1.0.0```
+```${currentVersion}``` right now is ```1.1.0```
 
 ## Configuration
 
@@ -39,13 +44,13 @@ To enable the concrete configuration, you must set the following properties:
 To AWS S3:
 ```yaml
 aws:
-    s3:
-      enabled: true
-      accessKey: [AMAZON_ACCESS_KEY]
-      secretKey: [AMAZON_SECRET_KEY]
-      bucket:
-        name: yourbucketname
-      region: [GovCloud("us-gov-west-1"),
+  s3:
+    enabled: true
+    accessKey: [AMAZON_ACCESS_KEY]
+    secretKey: [AMAZON_SECRET_KEY]
+    bucket:
+      name: yourbucketname
+    region: [GovCloud("us-gov-west-1"),
              US_EAST_1("us-east-1"),
              US_WEST_1("us-west-1"),
              US_WEST_2("us-west-2"),
@@ -57,9 +62,13 @@ aws:
              AP_NORTHEAST_1("ap-northeast-1"),
              AP_NORTHEAST_2("ap-northeast-2"),
              SA_EAST_1("sa-east-1"),
-             CN_NORTH_1("cn-north-1")]**
+             CN_NORTH_1("cn-north-1")]*
 ```
 ** Only one and only the string of the region.
+
+* **accessKey/secretKey**: the keys to connect to AWS. To get it, check out <a href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html" target="_blank">this information</a>.
+* **bucket.name**: the bucket name.
+* **region**: AWS region where your bucket is located.
 
 To Google Cloud Storage:
 ```yaml
@@ -70,6 +79,8 @@ gcp:
       name: yourbucketname
     keyfile: "where-you-keyfile"
 ```
+* **bucket.name**: the bucket name.
+* **keyfile**: the file to authenticate. To generate it, check out <a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#iam-service-account-keys-create-gcloud" target="_blank">this information</a>.
 
 To Azure Blob Storage:
 ```yaml
@@ -79,8 +90,20 @@ azure:
       enabled: true
       connectionString: "your-connection-string"
       container:
-        name: yourbucketname
+        name: containername
 ```
+* **connectionString**: to get it, check out <a href="https://docs.microsoft.com/es-es/azure/storage/common/storage-account-keys-manage?tabs=azure-portal" target="_blank">this information</a>.
+* **conainer.name**: name of your files container.
+
+To Dropbox:
+```yaml
+dropbox:
+  enabled: true
+  accessToken: "accessToken"
+  clientIdentifier: "clientIdentifier"
+```
+* **accessToken**: to get it, check out <a href="http://99rabbits.com/get-dropbox-access-token/" target="_blank">this information</a>.
+* **clientIdentifier**: name of your app.
 
 ## Enable async
 
@@ -91,10 +114,10 @@ Add ```@EnableAsync``` annotation in your Spring Application class to enable asy
 To controle max size of files you can upload, set the following properties:
 ```yaml
 spring:
-    servlet:
-        multipart:
-            max-file-size: 128KB
-            max-request-size: 128KB
+  servlet:
+    multipart:
+      max-file-size: 128KB
+      max-request-size: 128KB
 ```
 
 ## How to use
@@ -102,7 +125,8 @@ spring:
 You have to inject ```StorageService``` as dependency in your Spring component. 
 
 If you use more than one provider, you must name your bean
-as <b>awsS3Service</b> to AWS S3, <b>googleCloudStorageService</b> to Google Cloud Storage and <b>azureBlobStorageService</b> to Azure Blob Storage.
+as <b>awsS3Service</b> to AWS S3, <b>googleCloudStorageService</b> to Google Cloud Storage, <b>azureBlobStorageService</b> to Azure Blob Storage,
+and <b>dropboxService</b> to Dropbox.
 
 The service provide these methods:
 
@@ -192,10 +216,12 @@ This library can be tested with Localstack (<https://github.com/localstack/local
 You only have to set the following properties in your application.yml:
 
 ```yaml
-localstack:
-  enabled: false (by default)
-  endpoint: http://localhost:4572
-  region: us-east-1
+aws:
+  s3:
+    localstack:
+      enabled: false (by default)
+      endpoint: http://localhost:4572
+      region: us-east-1
 ```
 
 In order to run easily Localstack, I have added ```docker-compose.yml``` file to the folder ```localstack```. 
@@ -213,7 +239,7 @@ When you create a bucket, you have to add `yourbucketname.localhost` to your hos
 Here we are the AWS CLI S3 command options: <https://docs.aws.amazon.com/en_en/cli/latest/userguide/cli-services-s3-commands.html>
 
 ## Next adds
-* Support to Alibaba Cloud Object Storage Service (<https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v>), Dropbox, Google Drive...
+* Support to Alibaba Cloud Object Storage Service (<https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v>), Google Drive...
 * File permissions management
 
 ## License

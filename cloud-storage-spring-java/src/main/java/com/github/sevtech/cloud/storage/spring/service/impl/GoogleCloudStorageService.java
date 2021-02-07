@@ -13,6 +13,7 @@ import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,19 +24,16 @@ import java.io.IOException;
 import java.util.concurrent.Future;
 
 @Slf4j
+@RequiredArgsConstructor
 public class GoogleCloudStorageService extends AbstractStorageService implements StorageService {
 
     @Value("${gcp.storage.bucket.name}")
     private String defaultBucketName;
 
-    private Storage storageClient;
-
-    public GoogleCloudStorageService(Storage storageClient) {
-        this.storageClient = storageClient;
-    }
+    private final Storage storageClient;
 
     @Override
-    public UploadFileResponse uploadFile(UploadFileRequest uploadFileRequest) {
+    public UploadFileResponse uploadFile(final UploadFileRequest uploadFileRequest) {
         UploadFileResponse result;
 
         try {
@@ -55,12 +53,12 @@ public class GoogleCloudStorageService extends AbstractStorageService implements
 
     @Async
     @Override
-    public Future<UploadFileResponse> uploadFileAsync(UploadFileRequest uploadFileRequest) {
+    public Future<UploadFileResponse> uploadFileAsync(final UploadFileRequest uploadFileRequest) {
         return new AsyncResult<>(uploadFile(uploadFileRequest));
     }
 
     @Override
-    public GetFileResponse getFile(GetFileRequest request) {
+    public GetFileResponse getFile(final GetFileRequest request) {
         log.info("Reading file from AmazonS3 {}", request.getPath());
         GetFileResponse result;
         try {

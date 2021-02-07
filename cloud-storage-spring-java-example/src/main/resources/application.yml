@@ -1,6 +1,11 @@
 server:
   port: 9090
 
+dropbox:
+  enabled: false
+  accessToken: "accessToken"
+  clientIdentifier: "clientIdentifier"
+
 gcp:
   storage:
     enabled: false
@@ -13,8 +18,13 @@ aws:
     enabled: false
     accessKey: "your-access-key"
     secretKey: "your-secret-key"
-    bucket.name: mytestbucket
-  region: us-east-1
+    bucket:
+      name: mytestbucket
+    region: us-east-1
+    localstack:
+      enabled: false
+      endpoint: http://localhost:4572
+      region: us-east-1
 
 azure:
   blob:
@@ -23,8 +33,3 @@ azure:
       connectionString: "your-connection-string"
       container:
         name: prueba1
-
-localstack:
-  enabled: false
-  endpoint: http://localhost:4572
-  region: us-east-1
