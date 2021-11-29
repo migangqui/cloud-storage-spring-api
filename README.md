@@ -5,7 +5,7 @@ Here we are a Java and a Kotlin API to manage files of AWS S3, Google Cloud Stor
 <h4>AWS S3</h4>
 <img src="https://d1ngwfo98ojxvt.cloudfront.net/images/blog/aws/s3_getting_started/AmazonS3.png" width="13%">
 <h4>Google Cloud Storage</h4>
-<img src="https://developers.gigya.com/download/attachments/45809882/1200px-Google-Cloud-Storage-Logo.png?version=1&modificationDate=1574102537000&api=v2" width="10%">
+<img src="https://cdn.www.denodo.com/cdn/farfuture/azTr0Jzv8x3dQ7S_N1-JaX0ywwrAFrw5JS9Vx7VtBHA/mtime:1614168093/sites/default/files/public/images/icon-google-cloud-storage-logo.png" width="10%">
 <h4>Azure Store Blob</h4>
 <img src="https://dellenny.com/wp-content/uploads/2019/04/azure-storage-blob.png" width="13%">
 <h4>Dropbox</h4>
