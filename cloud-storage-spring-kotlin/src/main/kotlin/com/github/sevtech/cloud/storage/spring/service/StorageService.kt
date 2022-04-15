@@ -1,6 +1,6 @@
 package com.github.sevtech.cloud.storage.spring.service
 
-import com.github.sevtech.cloud.storage.spring.bean.*
+import com.github.sevtech.cloud.storage.spring.model.*
 import java.util.concurrent.Future
 
 interface StorageService {

@@ -1,7 +1,7 @@
 package com.github.sevtech.cloud.storage.spring.service.impl
 
 import com.amazonaws.util.IOUtils
-import com.github.sevtech.cloud.storage.spring.bean.*
+import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
 import com.github.sevtech.cloud.storage.spring.service.StorageService
 import com.google.cloud.storage.BlobId
@@ -24,8 +24,7 @@ class GoogleCloudStorageService(private val storageClient: Storage) : StorageSer
     private lateinit var defaultBucketName: String
 
     override fun uploadFile(request: UploadFileRequest): UploadFileResponse {
-        val result: UploadFileResponse
-        result = try {
+        return try {
             val bucketName = Optional.ofNullable(
                 Optional.ofNullable<String?>(request.bucketName).orElse(
                     defaultBucketName
@@ -37,8 +36,7 @@ class GoogleCloudStorageService(private val storageClient: Storage) : StorageSer
                 BlobInfo.newBuilder(
                     bucketName,
                     path
-                )
-                    .build(), IOUtils.toByteArray(request.stream)
+                ).build(), IOUtils.toByteArray(request.stream)
                 // setAcl(new ArrayList<>(Arrays.asList(Acl.of(User.ofAllUsers(), Role.READER))))
             )
             UploadFileResponse(
@@ -63,7 +61,6 @@ class GoogleCloudStorageService(private val storageClient: Storage) : StorageSer
                     exception = e
             )
         }
-        return result
     }
 
     @Async
@@ -75,28 +72,24 @@ class GoogleCloudStorageService(private val storageClient: Storage) : StorageSer
 
     override fun getFile(request: GetFileRequest): GetFileResponse {
         log.info("Reading file from Google Cloud Storage ${request.path}")
-        val result: GetFileResponse
-        result = try {
+        return try {
             val file = storageClient.readAllBytes(BlobId.of(getBucketName(request.bucketName), request.path))
             GetFileResponse(content = file, status = HttpStatus.SC_OK)
         } catch (e: NoBucketException) {
             log.error(e.message, e)
             GetFileResponse(cause = e.message, exception = e, status = HttpStatus.SC_INTERNAL_SERVER_ERROR)
         }
-        return result
     }
 
     override fun deleteFile(request: DeleteFileRequest): DeleteFileResponse {
         log.info("Deleting file from path $request.path")
-        val result: DeleteFileResponse
-        result = try {
+        return try {
             storageClient.delete(BlobId.of(getBucketName(request.bucketName), request.path))
             DeleteFileResponse(result = true, status = HttpStatus.SC_OK)
         } catch (e: NoBucketException) {
             log.error(e.message, e)
             DeleteFileResponse(cause = e.message, exception = e, status = HttpStatus.SC_INTERNAL_SERVER_ERROR)
         }
-        return result
     }
 
     @Throws(NoBucketException::class)

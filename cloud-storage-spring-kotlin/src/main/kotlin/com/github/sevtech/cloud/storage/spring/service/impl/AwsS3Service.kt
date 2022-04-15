@@ -5,7 +5,7 @@ import com.amazonaws.AmazonServiceException
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.*
 import com.amazonaws.util.IOUtils
-import com.github.sevtech.cloud.storage.spring.bean.*
+import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
 import com.github.sevtech.cloud.storage.spring.service.StorageService
 import mu.KotlinLogging

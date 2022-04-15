@@ -9,12 +9,12 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
+import com.github.sevtech.cloud.storage.spring.model.DeleteFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.DeleteFileResponse;
+import com.github.sevtech.cloud.storage.spring.model.GetFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.GetFileResponse;
+import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
@@ -41,10 +41,8 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
 
     @Override
     public UploadFileResponse uploadFile(final UploadFileRequest request) {
-        UploadFileResponse result;
-
         try {
-            InputStream streamToUpload = clone(request.getStream());
+            final InputStream streamToUpload = clone(request.getStream());
 
             final ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(IOUtils.toByteArray(request.getStream()).length);
@@ -54,28 +52,29 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
                 metadata.setCacheControl("s-maxage");
             }
 
-            final PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), getFilePath(request), streamToUpload, metadata)
-                    .withCannedAcl(request.getAccessControl());
+            final PutObjectRequest putObjectRequest = new PutObjectRequest(
+                    getBucketName(request.getBucketName(), defaultBucketName),
+                    getFilePath(request), streamToUpload, metadata).withCannedAcl(request.getAccessControl());
 
             log.debug("Uploading file to {}", getFilePath(request));
 
             awsS3Client.putObject(putObjectRequest);
 
-            result = UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_OK).build();
-        } catch (AmazonServiceException ase) {
+            return UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_OK).build();
+        } catch (final AmazonServiceException ase) {
             showAmazonServiceExceptionUploadFileLogs(ase);
-            result = UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            return UploadFileResponse.builder()
+                    .fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause(ase.getErrorMessage()).exception(ase).build();
-        } catch (AmazonClientException ace) {
+        } catch (final AmazonClientException ace) {
             showAmazonClientExceptionUploadFileLogs(ace);
-            result = UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            return UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause(ace.getMessage()).exception(ace).build();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error(e.getMessage(), e);
-            result = UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            return UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause(e.getMessage()).exception(e).build();
         }
-        return result;
     }
 
     @Async
@@ -87,36 +86,38 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
     @Override
     public GetFileResponse getFile(final GetFileRequest request) {
         log.info("Reading file from AmazonS3 {}", request.getPath());
-        GetFileResponse result;
-        try (S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()))) {
+        try (final S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(
+                getBucketName(request.getBucketName(), defaultBucketName), request.getPath()))) {
             final byte[] file = IOUtils.toByteArray(s3Object.getObjectContent());
-            result = GetFileResponse.builder().content(file).status(HttpStatus.SC_OK).build();
+            return GetFileResponse.builder().content(file).status(HttpStatus.SC_OK).build();
         } catch (NoBucketException | IOException e) {
             log.error(e.getMessage(), e);
-            result = GetFileResponse.builder().cause(e.getMessage()).exception(e).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            return GetFileResponse.builder().cause(e.getMessage()).exception(e)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        return result;
     }
 
     @Override
     public DeleteFileResponse deleteFile(final DeleteFileRequest request) {
         log.info("Deleting file from path {}", request.getPath());
-        DeleteFileResponse result;
         try {
-            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(getBucketName(request.getBucketName(), defaultBucketName), request.getPath());
+            final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(
+                    getBucketName(request.getBucketName(), defaultBucketName), request.getPath());
             awsS3Client.deleteObject(deleteObjectRequest);
-            result = DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
-        } catch (AmazonServiceException ase) {
+            return DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
+        } catch (final AmazonServiceException ase) {
             showAmazonServiceExceptionUploadFileLogs(ase);
-            result = DeleteFileResponse.builder().cause(ase.getMessage()).exception(ase).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
-        } catch (AmazonClientException ace) {
+            return DeleteFileResponse.builder().cause(ase.getMessage()).exception(ase)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        } catch (final AmazonClientException ace) {
             showAmazonClientExceptionUploadFileLogs(ace);
-            result = DeleteFileResponse.builder().cause(ace.getMessage()).exception(ace).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
-        } catch (Exception e) {
+            return DeleteFileResponse.builder().cause(ace.getMessage()).exception(ace)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+        } catch (final Exception e) {
             log.error(e.getMessage(), e);
-            result = DeleteFileResponse.builder().cause(e.getMessage()).exception(e).status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            return DeleteFileResponse.builder().cause(e.getMessage()).exception(e)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
         }
-        return result;
     }
 
     /* Private methods */

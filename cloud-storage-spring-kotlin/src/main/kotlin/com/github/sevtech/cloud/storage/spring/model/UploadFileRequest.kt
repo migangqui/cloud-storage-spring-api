@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.bean
+package com.github.sevtech.cloud.storage.spring.model
 
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import java.io.InputStream

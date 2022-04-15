@@ -1,6 +1,6 @@
 package com.github.sevtech.cloud.storage.spring.service
 
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest
+import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

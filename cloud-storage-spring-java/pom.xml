@@ -7,11 +7,11 @@
     <parent>
         <groupId>com.github.sevtech-dev</groupId>
         <artifactId>cloud-storage-spring</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
 
     <artifactId>cloud-storage-spring-java</artifactId>
-    <version>1.1.0</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>cloud-storage-spring-java</name>
@@ -44,8 +44,9 @@
     </scm>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
     <dependencies>
@@ -53,7 +54,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -63,10 +64,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version> <!-- or whatever current version -->
+                <version>3.10.1</version> <!-- or whatever current version -->
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -86,7 +87,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -99,7 +100,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.3.2</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -112,7 +113,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

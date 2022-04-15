@@ -4,12 +4,12 @@ import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.GetFileResponse;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse;
+import com.github.sevtech.cloud.storage.spring.model.DeleteFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.DeleteFileResponse;
+import com.github.sevtech.cloud.storage.spring.model.GetFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.GetFileResponse;
+import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.UploadFileResponse;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +28,14 @@ public class DropboxService implements StorageService {
 
     @Override
     public UploadFileResponse uploadFile(final UploadFileRequest request) {
-        UploadFileResponse result;
         try {
             dbxClientV2.files().uploadBuilder("/" + request.getFolder() + "/" + request.getName())
                     .uploadAndFinish(request.getStream());
-            result = UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_OK).build();
-        } catch (DbxException | IOException e) {
-            result = UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            return UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_OK).build();
+        } catch (final DbxException | IOException e) {
+            return UploadFileResponse.builder().fileName(request.getName()).status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause(e.getLocalizedMessage()).exception(e).build();
         }
-        return result;
     }
 
     @Async
@@ -48,27 +46,23 @@ public class DropboxService implements StorageService {
 
     @Override
     public GetFileResponse getFile(final GetFileRequest request) {
-        GetFileResponse result;
         try {
             DbxDownloader<FileMetadata> download = dbxClientV2.files().download(request.getPath());
-            result = GetFileResponse.builder().content(new byte[download.getInputStream().available()]).status(HttpStatus.SC_OK).build();
-        } catch (DbxException | IOException e) {
-            result = GetFileResponse.builder().status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            return GetFileResponse.builder().content(new byte[download.getInputStream().available()]).status(HttpStatus.SC_OK).build();
+        } catch (final DbxException | IOException e) {
+            return GetFileResponse.builder().status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause(e.getLocalizedMessage()).exception(e).build();
         }
-        return result;
     }
 
     @Override
     public DeleteFileResponse deleteFile(final DeleteFileRequest request) {
-        DeleteFileResponse result;
         try {
             dbxClientV2.files().deleteV2(request.getPath());
-            result = DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
-        } catch (DbxException e) {
-            result = DeleteFileResponse.builder().status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            return DeleteFileResponse.builder().result(true).status(HttpStatus.SC_OK).build();
+        } catch (final DbxException e) {
+            return DeleteFileResponse.builder().status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause(e.getLocalizedMessage()).exception(e).build();
         }
-        return result;
     }
 }

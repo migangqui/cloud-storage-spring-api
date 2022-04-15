@@ -8,8 +8,8 @@ import java.util.*
 
 internal class OnPropertyCondition : ConfigurationCondition {
     override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean {
-        val attributes = Optional.ofNullable<Map<String, Any>?>(metadata.getAnnotationAttributes(ConditionalOnCloudStorageProperty::class.java.name))
-                .orElse(HashMap())
+        val attributes = Optional.ofNullable<Map<String, Any>?>(
+            metadata.getAnnotationAttributes(ConditionalOnCloudStorageProperty::class.java.name)).orElse(HashMap())
         val propertyName = attributes!!["value"].toString()
         val propertyDesiredValue = attributes["on"] as Boolean
         val condition = context.environment.getProperty(propertyName, Boolean::class.java)
