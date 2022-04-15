@@ -1,0 +1,34 @@
+name: Kotlin with Nexus Repository
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java for publishing to Maven Central Repository
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+          server-id: ossrh-sevtech
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: build artifact
+        run: mvn clean package --file cloud-storage-spring-kotlin/pom.xml
+      - name: Publish to the Maven Central Repository
+        run: |
+          mvn -Prelease \
+            --no-transfer-progress \
+            --batch-mode \
+            deploy --file cloud-storage-spring-kotlin/pom.xml
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}

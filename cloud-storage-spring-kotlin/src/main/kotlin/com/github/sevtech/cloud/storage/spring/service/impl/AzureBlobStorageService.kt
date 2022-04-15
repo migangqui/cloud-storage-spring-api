@@ -4,7 +4,7 @@ import com.amazonaws.util.IOUtils
 import com.azure.storage.blob.BlobServiceClient
 import com.azure.storage.blob.models.BlobHttpHeaders
 import com.azure.storage.blob.specialized.BlockBlobClient
-import com.github.sevtech.cloud.storage.spring.bean.*
+import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService
 import com.github.sevtech.cloud.storage.spring.service.StorageService

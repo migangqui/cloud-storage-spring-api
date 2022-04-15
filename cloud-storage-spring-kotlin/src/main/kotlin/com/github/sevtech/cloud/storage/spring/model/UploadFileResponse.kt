@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.bean
+package com.github.sevtech.cloud.storage.spring.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 

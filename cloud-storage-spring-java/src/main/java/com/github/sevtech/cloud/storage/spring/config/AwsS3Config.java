@@ -25,19 +25,21 @@ public class AwsS3Config {
 
     @Bean
     public AmazonS3 awsS3Client(final AwsS3Properties awsS3Properties) {
-        AmazonS3 client;
+        final AmazonS3 client;
 
         if (awsS3Properties.getLocalstackEnabled()) {
             log.info("Registering AmazonS3Client (with Localstack)");
             client = AmazonS3ClientBuilder.standard()
-                    .withEndpointConfiguration(new EndpointConfiguration(awsS3Properties.getLocalstackEndpoint(), awsS3Properties.getLocalstackRegion()))
+                    .withEndpointConfiguration(new EndpointConfiguration(
+                            awsS3Properties.getLocalstackEndpoint(), awsS3Properties.getLocalstackRegion()))
                     .withPathStyleAccessEnabled(true)
                     .build();
         } else {
             log.info("Registering AmazonS3Client");
             client = AmazonS3ClientBuilder
                     .standard()
-                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsS3Properties.getAccessKey(), awsS3Properties.getSecretKey())))
+                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(
+                            awsS3Properties.getAccessKey(), awsS3Properties.getSecretKey())))
                     .withRegion(awsS3Properties.getRegion())
                     .build();
         }

@@ -1,13 +1,15 @@
 package com.github.sevtech.cloud.storage.spring.service;
 
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest;
+import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Optional;
 
+@Slf4j
 public abstract class AbstractStorageService {
 
     protected InputStream clone(final InputStream inputStream) {
@@ -23,8 +25,8 @@ public abstract class AbstractStorageService {
             inputStream.reset();
             outputStream.flush();
             result = new ByteArrayInputStream(outputStream.toByteArray());
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (final Exception exception) {
+            log.warn("Exception cloning inputStream", exception);
         }
         return result;
     }

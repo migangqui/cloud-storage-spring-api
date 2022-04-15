@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.bean;
+package com.github.sevtech.cloud.storage.spring.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class GetFileResponse extends BaseResponse {
 	private byte[] content;
 }

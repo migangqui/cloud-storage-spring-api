@@ -22,7 +22,8 @@ public class AzureBlobStorageConfig {
     @Bean
     public BlobServiceClient blobServiceClient(final AzureBlobStorageProperties azureBlobStorageProperties) {
         log.info("Registering Azure Blob Storage client");
-        return new BlobServiceClientBuilder().connectionString(azureBlobStorageProperties.getConnectionString()).buildClient();
+        return new BlobServiceClientBuilder().connectionString(
+                azureBlobStorageProperties.getConnectionString()).buildClient();
     }
 
     @Bean

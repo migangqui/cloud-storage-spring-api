@@ -27,7 +27,8 @@ public class GoogleCloudStorageConfig {
     public Storage storageClient(final GoogleCloudStorageProperties googleCloudStorageProperties) throws IOException {
         log.info("Registering Google Storage client");
         return StorageOptions.newBuilder()
-                .setCredentials(ServiceAccountCredentials.fromStream(new FileInputStream(googleCloudStorageProperties.getKeyfile())))
+                .setCredentials(ServiceAccountCredentials.fromStream(
+                        new FileInputStream(googleCloudStorageProperties.getKeyfile())))
                 .build()
                 .getService();
     }

@@ -2,7 +2,7 @@ package com.github.sevtech.cloud.storage.spring.service.impl
 
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
-import com.github.sevtech.cloud.storage.spring.bean.*
+import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.service.StorageService
 import mu.KotlinLogging
 import org.apache.http.HttpStatus
