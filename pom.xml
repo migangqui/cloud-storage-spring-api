@@ -17,7 +17,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-boot.version>2.6.6</spring-boot.version>
-        <aws-java-sdk-s3.version>1.12.199</aws-java-sdk-s3.version>
+        <aws-java-sdk-s3.version>1.12.261</aws-java-sdk-s3.version>
         <google-cloud-storage.version>2.6.0</google-cloud-storage.version>
         <azure-storage-blob.version>12.16.0</azure-storage-blob.version>
         <dropbox-core-sdk.version>5.2.0</dropbox-core-sdk.version>
