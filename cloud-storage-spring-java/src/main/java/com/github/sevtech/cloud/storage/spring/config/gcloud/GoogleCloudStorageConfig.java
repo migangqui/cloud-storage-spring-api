@@ -1,8 +1,9 @@
-package com.github.sevtech.cloud.storage.spring.config;
+package com.github.sevtech.cloud.storage.spring.config.gcloud;
 
-import com.github.sevtech.cloud.storage.spring.property.GoogleCloudStorageProperties;
+import com.github.sevtech.cloud.storage.spring.config.ConditionalOnCloudStorageProperty;
+import com.github.sevtech.cloud.storage.spring.property.gcloud.GoogleCloudStorageProperties;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
-import com.github.sevtech.cloud.storage.spring.service.impl.GoogleCloudStorageService;
+import com.github.sevtech.cloud.storage.spring.service.gcloud.GoogleCloudStorageService;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;

@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.service.impl;
+package com.github.sevtech.cloud.storage.spring.service.aws;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -9,13 +9,13 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
+import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.model.DeleteFileRequest;
 import com.github.sevtech.cloud.storage.spring.model.DeleteFileResponse;
 import com.github.sevtech.cloud.storage.spring.model.GetFileRequest;
 import com.github.sevtech.cloud.storage.spring.model.GetFileResponse;
 import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.model.UploadFileResponse;
-import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +42,8 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
     @Override
     public UploadFileResponse uploadFile(final UploadFileRequest request) {
         try {
+            log.info("Uploading file to {}", getFilePath(request));
+
             final InputStream streamToUpload = clone(request.getStream());
 
             final ObjectMetadata metadata = new ObjectMetadata();
@@ -55,8 +57,6 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
             final PutObjectRequest putObjectRequest = new PutObjectRequest(
                     getBucketName(request.getBucketName(), defaultBucketName),
                     getFilePath(request), streamToUpload, metadata).withCannedAcl(request.getAccessControl());
-
-            log.debug("Uploading file to {}", getFilePath(request));
 
             awsS3Client.putObject(putObjectRequest);
 
@@ -85,12 +85,12 @@ public class AwsS3Service extends AbstractStorageService implements StorageServi
 
     @Override
     public GetFileResponse getFile(final GetFileRequest request) {
-        log.info("Reading file from AmazonS3 {}", request.getPath());
+        log.info("Reading file from {}", request.getPath());
         try (final S3Object s3Object = awsS3Client.getObject(new GetObjectRequest(
                 getBucketName(request.getBucketName(), defaultBucketName), request.getPath()))) {
             final byte[] file = IOUtils.toByteArray(s3Object.getObjectContent());
             return GetFileResponse.builder().content(file).status(HttpStatus.SC_OK).build();
-        } catch (NoBucketException | IOException e) {
+        } catch (final NoBucketException | IOException e) {
             log.error(e.getMessage(), e);
             return GetFileResponse.builder().cause(e.getMessage()).exception(e)
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();

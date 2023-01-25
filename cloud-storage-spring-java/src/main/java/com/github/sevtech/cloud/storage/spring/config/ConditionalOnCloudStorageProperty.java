@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Conditional(OnPropertyCondition.class)
-@interface ConditionalOnCloudStorageProperty {
+public @interface ConditionalOnCloudStorageProperty {
     String value();
 
     boolean on() default true;

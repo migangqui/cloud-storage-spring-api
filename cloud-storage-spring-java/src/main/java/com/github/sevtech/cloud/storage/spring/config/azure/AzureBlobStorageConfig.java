@@ -1,10 +1,11 @@
-package com.github.sevtech.cloud.storage.spring.config;
+package com.github.sevtech.cloud.storage.spring.config.azure;
 
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
-import com.github.sevtech.cloud.storage.spring.property.AzureBlobStorageProperties;
+import com.github.sevtech.cloud.storage.spring.config.ConditionalOnCloudStorageProperty;
+import com.github.sevtech.cloud.storage.spring.property.azure.AzureBlobStorageProperties;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
-import com.github.sevtech.cloud.storage.spring.service.impl.AzureBlobStorageService;
+import com.github.sevtech.cloud.storage.spring.service.azure.AzureBlobStorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

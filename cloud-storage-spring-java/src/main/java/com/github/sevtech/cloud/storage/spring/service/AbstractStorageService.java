@@ -1,7 +1,7 @@
 package com.github.sevtech.cloud.storage.spring.service;
 
-import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
+import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;

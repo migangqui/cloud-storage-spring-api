@@ -1,13 +1,13 @@
-package com.github.sevtech.cloud.storage.spring.service.impl;
+package com.github.sevtech.cloud.storage.spring.service.gcloud;
 
 import com.amazonaws.util.IOUtils;
+import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.model.DeleteFileRequest;
 import com.github.sevtech.cloud.storage.spring.model.DeleteFileResponse;
 import com.github.sevtech.cloud.storage.spring.model.GetFileRequest;
 import com.github.sevtech.cloud.storage.spring.model.GetFileResponse;
 import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest;
 import com.github.sevtech.cloud.storage.spring.model.UploadFileResponse;
-import com.github.sevtech.cloud.storage.spring.exception.NoBucketException;
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
 import com.google.cloud.storage.BlobId;
@@ -33,19 +33,20 @@ public class GoogleCloudStorageService extends AbstractStorageService implements
     private final Storage storageClient;
 
     @Override
-    public UploadFileResponse uploadFile(final UploadFileRequest uploadFileRequest) {
+    public UploadFileResponse uploadFile(final UploadFileRequest request) {
         try {
-            final String bucketName = getBucketName(uploadFileRequest.getBucketName(), defaultBucketName);
+            log.info("Uploading file to {}", getFilePath(request));
+            final String bucketName = getBucketName(request.getBucketName(), defaultBucketName);
 
             final BlobInfo blobInfo =
-                    storageClient.create(BlobInfo.newBuilder(bucketName, getFilePath(uploadFileRequest))
+                    storageClient.create(BlobInfo.newBuilder(bucketName, getFilePath(request))
 //                    .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
-                    .build(), IOUtils.toByteArray(uploadFileRequest.getStream()));
-            return UploadFileResponse.builder().fileName(uploadFileRequest.getName())
+                    .build(), IOUtils.toByteArray(request.getStream()));
+            return UploadFileResponse.builder().fileName(request.getName())
                     .status(HttpStatus.SC_OK).comment(blobInfo.getMediaLink()).build();
-        } catch (NoBucketException | IOException e) {
+        } catch (final NoBucketException | IOException e) {
             log.warn("Error creating blob");
-            return UploadFileResponse.builder().fileName(uploadFileRequest.getName())
+            return UploadFileResponse.builder().fileName(request.getName())
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .cause("Error creating blob").exception(e).build();
         }
@@ -59,7 +60,7 @@ public class GoogleCloudStorageService extends AbstractStorageService implements
 
     @Override
     public GetFileResponse getFile(final GetFileRequest request) {
-        log.info("Reading file from AmazonS3 {}", request.getPath());
+        log.info("Reading file from {}", request.getPath());
         try {
             final byte[] file = storageClient.readAllBytes(
                     BlobId.of(getBucketName(request.getBucketName(), defaultBucketName), request.getPath()));

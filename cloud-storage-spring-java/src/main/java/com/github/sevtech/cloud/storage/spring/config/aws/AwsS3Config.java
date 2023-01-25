@@ -1,12 +1,13 @@
-package com.github.sevtech.cloud.storage.spring.config;
+package com.github.sevtech.cloud.storage.spring.config.aws;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.github.sevtech.cloud.storage.spring.property.AwsS3Properties;
+import com.github.sevtech.cloud.storage.spring.config.ConditionalOnCloudStorageProperty;
+import com.github.sevtech.cloud.storage.spring.property.aws.AwsS3Properties;
 import com.github.sevtech.cloud.storage.spring.service.StorageService;
-import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service;
+import com.github.sevtech.cloud.storage.spring.service.aws.AwsS3Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

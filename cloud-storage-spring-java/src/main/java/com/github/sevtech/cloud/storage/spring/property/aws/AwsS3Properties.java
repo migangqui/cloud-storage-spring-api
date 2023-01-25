@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.property;
+package com.github.sevtech.cloud.storage.spring.property.aws;
 
 import lombok.Getter;
 import lombok.Setter;
