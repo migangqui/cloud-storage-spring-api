@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.sevtech-dev</groupId>
         <artifactId>cloud-storage-spring</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </parent>
 
     <artifactId>cloud-storage-spring-java</artifactId>
@@ -17,7 +17,7 @@
     <name>cloud-storage-spring-java</name>
     <description>Spring Cloud Storage Java API to AWS, GCloud, Azure and Dropbox</description>
 
-    <url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
+    <url>https://github.com/migangqui/cloud-storage-spring-api</url>
     <developers>
         <developer>
             <name>Miguel Angel Quintanilla</name>
@@ -38,7 +38,7 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
+        <url>https://github.com/migangqui/cloud-storage-spring-api</url>
         <connection>scm:git:git@github.com:sevtech-dev/cloud-storage-spring-api.git</connection>
         <developerConnection>scm:git:git@github.com:sevtech-dev/cloud-storage-spring-api.git</developerConnection>
     </scm>
@@ -46,7 +46,7 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
     </properties>
 
     <dependencies>
@@ -100,7 +100,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.3.2</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
