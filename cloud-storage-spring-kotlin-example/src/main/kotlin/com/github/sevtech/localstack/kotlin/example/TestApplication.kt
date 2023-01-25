@@ -1,9 +1,9 @@
 package com.github.sevtech.localstack.kotlin.example
 
-import com.github.sevtech.cloud.storage.spring.bean.DeleteFileRequest
-import com.github.sevtech.cloud.storage.spring.bean.GetFileRequest
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileRequest
-import com.github.sevtech.cloud.storage.spring.bean.UploadFileResponse
+import com.github.sevtech.cloud.storage.spring.model.DeleteFileRequest
+import com.github.sevtech.cloud.storage.spring.model.GetFileRequest
+import com.github.sevtech.cloud.storage.spring.model.UploadFileRequest
+import com.github.sevtech.cloud.storage.spring.model.UploadFileResponse
 import com.github.sevtech.cloud.storage.spring.service.StorageService
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

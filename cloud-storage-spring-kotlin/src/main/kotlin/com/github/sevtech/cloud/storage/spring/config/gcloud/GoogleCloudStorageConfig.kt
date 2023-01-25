@@ -1,12 +1,13 @@
-package com.github.sevtech.cloud.storage.spring.config
+package com.github.sevtech.cloud.storage.spring.config.gcloud
 
-import com.github.sevtech.cloud.storage.spring.property.GoogleCloudStorageProperties
+import com.github.sevtech.cloud.storage.spring.config.ConditionalOnCloudStorageProperty
+import com.github.sevtech.cloud.storage.spring.property.gcloud.GoogleCloudStorageProperties
 import com.github.sevtech.cloud.storage.spring.service.StorageService
-import com.github.sevtech.cloud.storage.spring.service.impl.GoogleCloudStorageService
+import com.github.sevtech.cloud.storage.spring.service.gcloud.GoogleCloudStorageService
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.storage.Storage
 import com.google.cloud.storage.StorageOptions
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.FileInputStream
@@ -16,7 +17,7 @@ import java.io.IOException
 @ConditionalOnCloudStorageProperty(value = "gcp.storage.enabled")
 class GoogleCloudStorageConfig {
 
-    private val log = KotlinLogging.logger {}
+    private val log = LoggerFactory.getLogger(this.javaClass)
 
     @Bean
     fun googleCloudStorageProperties(): GoogleCloudStorageProperties? {

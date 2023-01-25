@@ -1,23 +1,25 @@
-package com.github.sevtech.cloud.storage.spring.service.impl
+package com.github.sevtech.cloud.storage.spring.service.dropbox
 
 import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.github.sevtech.cloud.storage.spring.model.*
+import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService
 import com.github.sevtech.cloud.storage.spring.service.StorageService
-import mu.KotlinLogging
 import org.apache.http.HttpStatus
+import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.AsyncResult
 import java.io.IOException
 import java.util.concurrent.Future
 
-class DropboxService(private val dbxClientV2: DbxClientV2) : StorageService {
+class DropboxService(private val dbxClientV2: DbxClientV2) : AbstractStorageService(), StorageService {
 
-    private val log = KotlinLogging.logger {}
+    private val log = LoggerFactory.getLogger(this.javaClass)
 
     override fun uploadFile(request: UploadFileRequest): UploadFileResponse {
         return try {
-            dbxClientV2.files().uploadBuilder("/" + request.folder + "/" + request.name)
+            log.info("Uploading file to ${getFilePath(request)}")
+            dbxClientV2.files().uploadBuilder("/" + getFilePath(request))
                     .uploadAndFinish(request.stream)
             UploadFileResponse(request.name, HttpStatus.SC_OK)
         } catch (e: DbxException) {
@@ -36,6 +38,7 @@ class DropboxService(private val dbxClientV2: DbxClientV2) : StorageService {
 
     override fun getFile(request: GetFileRequest): GetFileResponse {
         return try {
+            log.info("Reading file from {}", request.path)
             val download = dbxClientV2.files().download(request.path)
             GetFileResponse(ByteArray(download.inputStream.available()), HttpStatus.SC_OK)
         } catch (e: DbxException) {
@@ -49,6 +52,7 @@ class DropboxService(private val dbxClientV2: DbxClientV2) : StorageService {
 
     override fun deleteFile(request: DeleteFileRequest): DeleteFileResponse {
         return try {
+            log.info("Deleting file from {}", request.path)
             dbxClientV2.files().deleteV2(request.path)
             DeleteFileResponse(true, HttpStatus.SC_OK)
         } catch (e: DbxException) {

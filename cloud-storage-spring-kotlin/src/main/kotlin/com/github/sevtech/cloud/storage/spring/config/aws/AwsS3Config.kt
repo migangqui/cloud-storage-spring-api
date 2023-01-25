@@ -1,14 +1,15 @@
-package com.github.sevtech.cloud.storage.spring.config
+package com.github.sevtech.cloud.storage.spring.config.aws
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.github.sevtech.cloud.storage.spring.property.AwsS3Properties
+import com.github.sevtech.cloud.storage.spring.config.ConditionalOnCloudStorageProperty
+import com.github.sevtech.cloud.storage.spring.property.aws.AwsS3Properties
 import com.github.sevtech.cloud.storage.spring.service.StorageService
-import com.github.sevtech.cloud.storage.spring.service.impl.AwsS3Service
-import mu.KotlinLogging
+import com.github.sevtech.cloud.storage.spring.service.aws.AwsS3Service
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Configuration
 @ConditionalOnCloudStorageProperty(value = "aws.s3.enabled")
 class AwsS3Config() {
 
-    private val log = KotlinLogging.logger {}
+    private val log = LoggerFactory.getLogger(this.javaClass)
 
     @Bean
     fun awsS3Properties(): AwsS3Properties {

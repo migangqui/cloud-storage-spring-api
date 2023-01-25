@@ -1,4 +1,4 @@
-package com.github.sevtech.cloud.storage.spring.property
+package com.github.sevtech.cloud.storage.spring.property.aws
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

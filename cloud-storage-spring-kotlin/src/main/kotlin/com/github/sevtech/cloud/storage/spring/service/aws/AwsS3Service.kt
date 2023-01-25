@@ -1,34 +1,33 @@
-package com.github.sevtech.cloud.storage.spring.service.impl
+package com.github.sevtech.cloud.storage.spring.service.aws
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.AmazonServiceException
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.*
 import com.amazonaws.util.IOUtils
-import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
+import com.github.sevtech.cloud.storage.spring.model.*
+import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService
 import com.github.sevtech.cloud.storage.spring.service.StorageService
-import mu.KotlinLogging
 import org.apache.http.HttpStatus
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Async
 import org.springframework.scheduling.annotation.AsyncResult
 import org.springframework.util.StringUtils
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
 import java.util.*
 import java.util.concurrent.Future
 
-class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
+class AwsS3Service(private val s3Client: AmazonS3) : AbstractStorageService(), StorageService {
 
-    private val log = KotlinLogging.logger {}
+    private val log = LoggerFactory.getLogger(this.javaClass)
 
     @Value("\${amazon.s3.bucket.name}")
     private lateinit var defaultBucketName: String
 
     override fun uploadFile(request: UploadFileRequest): UploadFileResponse {
         return try {
+            log.info("Uploading file to ${getFilePath(request)}")
             val bucketName = Optional.ofNullable(
                     Optional.ofNullable(request.bucketName).orElse(defaultBucketName))
                     .orElseThrow { NoBucketException("Bucket name not indicated") }
@@ -43,12 +42,8 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
                 metadata.cacheControl = "s-maxage"
             }
 
-            val path = "$request.folder/$request.name"
-
-            val uploadFileRequest = PutObjectRequest(bucketName, path, streamToUpload, metadata)
+            val uploadFileRequest = PutObjectRequest(bucketName, getFilePath(request), streamToUpload, metadata)
                     .withCannedAcl(request.accessControl)
-
-            log.debug("Uploading file to $path")
 
             s3Client.putObject(uploadFileRequest)
 
@@ -60,10 +55,10 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
             showAmazonClientExceptionUploadFileLogs(ace)
             UploadFileResponse(request.name, HttpStatus.SC_INTERNAL_SERVER_ERROR, ace.message, ace)
         } catch (e: NoBucketException) {
-            log.warn { e.message }
+            log.warn(e.message)
             UploadFileResponse(request.name, HttpStatus.SC_INTERNAL_SERVER_ERROR, e.message, e)
         } catch (e: Exception) {
-            log.error { e.message }
+            log.error(e.message)
             UploadFileResponse(request.name, HttpStatus.SC_INTERNAL_SERVER_ERROR, e.message, e)
         }
     }
@@ -74,10 +69,9 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
     }
 
     override fun getFile(request: GetFileRequest): GetFileResponse {
-        log.info("Reading file from AmazonS3 ${request.path}")
-        val result: GetFileResponse
-        result = try {
-            val s3Object: S3Object = s3Client.getObject(GetObjectRequest(getBucketName(request.bucketName), request.path))
+        log.info("Reading file from ${request.path}")
+        val result: GetFileResponse = try {
+            val s3Object: S3Object = s3Client.getObject(GetObjectRequest(getBucketName(request.bucketName, defaultBucketName), request.path))
             GetFileResponse(content = IOUtils.toByteArray(s3Object.objectContent), status = HttpStatus.SC_OK)
         } catch (e: NoBucketException) {
             log.error(e.message, e)
@@ -87,10 +81,9 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
     }
 
     override fun deleteFile(request: DeleteFileRequest): DeleteFileResponse {
-        log.info("Deleting file from path $request.path")
-        val result: DeleteFileResponse
-        result = try {
-            val deleteObjectRequest = DeleteObjectRequest(getBucketName(request.bucketName), request.path)
+        log.info("Deleting file from $request.path")
+        val result: DeleteFileResponse = try {
+            val deleteObjectRequest = DeleteObjectRequest(getBucketName(request.bucketName, defaultBucketName), request.path)
             s3Client.deleteObject(deleteObjectRequest)
             DeleteFileResponse(result = true, status = HttpStatus.SC_OK)
         } catch (ase: AmazonServiceException) {
@@ -113,45 +106,18 @@ class AwsS3Service(private val s3Client: AmazonS3) : StorageService {
                 "Caught an AmazonServiceException, which means your request made it " +
                         "to Amazon S3, but was rejected with an error response for some reason."
         )
-        log.error { "Error Message:    ${ase.message}" }
-        log.error { "HTTP Status Code: ${ase.statusCode}" }
-        log.error { "AWS Error Code:   ${ase.errorCode}" }
-        log.error { "Error Type:       ${ase.errorType}" }
-        log.error { "Request ID:       ${ase.requestId}" }
+        log.error("Error Message:    ${ase.message}")
+        log.error("HTTP Status Code: ${ase.statusCode}")
+        log.error("AWS Error Code:   ${ase.errorCode}")
+        log.error("Error Type:       ${ase.errorType}")
+        log.error("Request ID:       ${ase.requestId}")
     }
 
     private fun showAmazonClientExceptionUploadFileLogs(ace: AmazonClientException) {
-        log.error {
+        log.error(
             "Caught an AmazonClientException, which means the client encountered " +
-                    "an internal error while trying to communicate with S3, such as not being able to access the network."
-        }
-        log.error { "Error Message: ${ace.message}" }
-    }
+                    "an internal error while trying to communicate with S3, such as not being able to access the network.")
 
-    private fun InputStream.clone(): InputStream? {
-        var result: InputStream? = null
-        try {
-            this.mark(0)
-            val outputStream = ByteArrayOutputStream()
-            val buffer = ByteArray(1024)
-            var readLength = this.read(buffer)
-            while ((readLength) != -1) {
-                outputStream.write(buffer, 0, readLength)
-                readLength = this.read(buffer)
-            }
-            this.reset()
-            outputStream.flush()
-            result = ByteArrayInputStream(outputStream.toByteArray())
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-        return result
-    }
-
-    @Throws(NoBucketException::class)
-    private fun getBucketName(bucketName: String?): String? {
-        return Optional.ofNullable(
-                Optional.ofNullable(bucketName).orElse(defaultBucketName))
-                .orElseThrow { NoBucketException("Bucket name not indicated") }
+        log.error("Error Message: ${ace.message}")
     }
 }

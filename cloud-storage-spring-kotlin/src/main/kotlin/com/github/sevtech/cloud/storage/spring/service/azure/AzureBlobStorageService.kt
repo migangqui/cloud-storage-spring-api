@@ -1,15 +1,15 @@
-package com.github.sevtech.cloud.storage.spring.service.impl
+package com.github.sevtech.cloud.storage.spring.service.azure
 
 import com.amazonaws.util.IOUtils
 import com.azure.storage.blob.BlobServiceClient
 import com.azure.storage.blob.models.BlobHttpHeaders
 import com.azure.storage.blob.specialized.BlockBlobClient
-import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.exception.NoBucketException
+import com.github.sevtech.cloud.storage.spring.model.*
 import com.github.sevtech.cloud.storage.spring.service.AbstractStorageService
 import com.github.sevtech.cloud.storage.spring.service.StorageService
-import mu.KotlinLogging
 import org.apache.http.HttpStatus
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.AsyncResult
 import java.io.ByteArrayOutputStream
@@ -19,13 +19,14 @@ import java.util.concurrent.Future
 
 class AzureBlobStorageService(private val blobServiceClient: BlobServiceClient) : AbstractStorageService(), StorageService {
 
-    private val log = KotlinLogging.logger {}
+    private val log = LoggerFactory.getLogger(this.javaClass)
 
     @Value("\${azure.blob.storage.container.name}")
     private lateinit var defaultContainerName: String
 
     override fun uploadFile(request: UploadFileRequest): UploadFileResponse {
         return try {
+            log.info("Uploading file to ${getFilePath(request)}")
             val streamToUpload: InputStream? = request.stream.clone()
             val blockBlobClient = getBlobClient(request.bucketName, getFilePath(request))
             val headers = BlobHttpHeaders()
@@ -47,7 +48,7 @@ class AzureBlobStorageService(private val blobServiceClient: BlobServiceClient) 
     }
 
     override fun getFile(request: GetFileRequest): GetFileResponse {
-        log.info("Reading file from Azure {}", request.path)
+        log.info("Reading file from {}", request.path)
         return try {
             val outputStream = ByteArrayOutputStream()
             val blockBlobClient = getBlobClient(request.bucketName, request.path)
@@ -63,7 +64,7 @@ class AzureBlobStorageService(private val blobServiceClient: BlobServiceClient) 
     }
 
     override fun deleteFile(request: DeleteFileRequest): DeleteFileResponse {
-        log.info("Deleting file from Azure {}", request.path)
+        log.info("Deleting file from {}", request.path)
         return try {
             val blockBlobClient: BlockBlobClient = getBlobClient(request.bucketName, request.path)
             blockBlobClient.delete()

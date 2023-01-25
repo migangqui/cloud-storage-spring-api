@@ -45,7 +45,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<kotlin.version>1.6.20</kotlin.version>
+		<kotlin.version>1.8.0</kotlin.version>
 	</properties>
 
 	<dependencies>
@@ -58,11 +58,6 @@
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-reflect</artifactId>
 			<version>${kotlin.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.microutils</groupId>
-			<artifactId>kotlin-logging</artifactId>
-			<version>1.6.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
@@ -152,7 +147,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.3.2</version>
+						<version>3.4.1</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -179,7 +174,7 @@
 					<plugin>
 						<groupId>org.jetbrains.dokka</groupId>
 						<artifactId>dokka-maven-plugin</artifactId>
-						<version>1.6.10</version>
+						<version>1.7.20</version>
 						<executions>
 							<execution>
 								<phase>prepare-package</phase>
