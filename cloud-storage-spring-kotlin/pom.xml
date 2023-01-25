@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.github.sevtech-dev</groupId>
 		<artifactId>cloud-storage-spring</artifactId>
-		<version>1.1.1</version>
+		<version>1.1.2</version>
 	</parent>
 
 	<artifactId>cloud-storage-spring-kotlin</artifactId>
@@ -16,7 +16,7 @@
 	<name>cloud-storage-spring-kotlin</name>
 	<description>Spring Cloud Storage Kotlin API to AWS, GCloud, Azure and Dropbox</description>
 
-	<url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
+	<url>https://github.com/migangqui/cloud-storage-spring-api</url>
 	<developers>
 		<developer>
 			<name>Miguel Angel Quintanilla</name>
@@ -37,7 +37,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://github.com/sevtech-dev/cloud-storage-spring-api</url>
+		<url>https://github.com/migangqui/cloud-storage-spring-api</url>
 		<connection>scm:git:git@github.com:sevtech-dev/cloud-storage-spring-api.git</connection>
 		<developerConnection>scm:git:git@github.com:sevtech-dev/cloud-storage-spring-api.git</developerConnection>
 	</scm>
