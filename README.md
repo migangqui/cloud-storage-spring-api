@@ -13,7 +13,7 @@ Here we are a Java and a Kotlin API to manage files of AWS S3, Google Cloud Stor
 
 In order to use it, are necessaries the following steps:
 
-### Add dependency to pom.xml:
+### Add dependency to Maven or Gradle:
 
 If you use Java:
 
@@ -23,6 +23,9 @@ If you use Java:
 	<artifactId>cloud-storage-spring-java</artifactId>
 	<version>${currentVersion}</version>
 </dependency>
+```
+```groovy
+implementation 'com.github.sevtech-dev:cloud-storage-spring-java:${currentVersion}'
 ```
 
 If you use Kotlin:
@@ -34,12 +37,15 @@ If you use Kotlin:
 	<version>${currentVersion}</version>
 </dependency>
 ```
+```groovy
+implementation 'com.github.sevtech-dev:cloud-storage-spring-kotlin:${currentVersion}'
+```
 
 ```${currentVersion}``` right now is ```1.1.2```
 
 ## Configuration
 
-To enable the concrete configuration, you must set the following properties:
+To enable the wanted client configuration, you must set the following properties:
 
 To AWS S3:
 ```yaml
@@ -212,14 +218,13 @@ interface StorageService {
 
 ### AWS S3: Localstack support
 
-This library can be tested with Localstack (<https://github.com/localstack/localstack>).
-You only have to set the following properties in your application.yml:
+This library can be tested with <a href="https://github.com/localstack/localstack">Localstack</a>. You only have to set the following properties in your application.yml:
 
 ```yaml
 aws:
   s3:
     localstack:
-      enabled: false (by default)
+      enabled: true
       endpoint: http://localhost:4572
       region: us-east-1
 ```
@@ -240,7 +245,7 @@ Here we are the AWS CLI S3 command options: <https://docs.aws.amazon.com/en_en/c
 
 ## Next adds
 * Support to <a href="https://www.alibabacloud.com/product/oss?spm=a3c0i.7911826.1389108.dnavproductstorage1.441914b3M6269v" target="_blank">Alibaba Cloud Object Storage Service</a>, <a href="https://www.oracle.com/es/cloud/storage/object-storage/" target="_blank">Oracle Object Storage</a>, Google Drive...
-* File permissions management
+* File permissions management.
 
 ## License
 
