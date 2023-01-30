@@ -1,5 +1,8 @@
 # Cloud Storage Spring (Java/Kotlin)
 
+![GitHub last commit](https://img.shields.io/github/last-commit/migangqui/cloud-storage-spring-api?style=for-the-badge)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.sevtech-dev/cloud-storage-spring-java?style=for-the-badge)
+
 Here we are a Java and a Kotlin API to manage files of AWS S3, Google Cloud Storage, Azure Blob Storage and Dropbox in Spring framework.
 
 <h4>AWS S3</h4>
