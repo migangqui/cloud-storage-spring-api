@@ -16,7 +16,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <spring-boot.version>2.7.8</spring-boot.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
         <aws-java-sdk-s3.version>1.12.390</aws-java-sdk-s3.version>
         <google-cloud-storage.version>2.17.2</google-cloud-storage.version>
         <azure-storage-blob.version>12.20.2</azure-storage-blob.version>
